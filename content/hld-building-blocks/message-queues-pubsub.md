@@ -10,6 +10,8 @@ That single sentence hides a lot of machinery. Everything below is that machiner
 
 ## Anatomy of a broker
 
+![Producer, exchange, queues, consumers and the prefetch window, plus the state machine one message moves through](diagrams/mq-broker-anatomy.svg)
+
 A **broker** is a server process that accepts messages, decides where they belong, stores them durably, hands them to consumers, and tracks which ones are still outstanding. Four moving parts, and every broker has all four even when it names them differently.
 
 **1. The ingress and the confirm.** The producer opens a long-lived TCP connection (usually multiplexed into logical **channels**, so one socket carries many concurrent publishers) and sends a message. The broker replies with an **acknowledgement to the producer** — RabbitMQ calls this a *publisher confirm*, Kafka calls it the produce response, SQS returns a `MessageId`. Until that reply arrives, the producer must assume nothing. Fire-and-forget publishing — not waiting for the confirm — is the single most common way people lose messages while believing the broker guarantees delivery. The broker's guarantee starts at the confirm, not at the `send()` call.
