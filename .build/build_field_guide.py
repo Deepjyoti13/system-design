@@ -14,12 +14,25 @@ TEMPLATE = Path(__file__).parent / "field-guide-template.html"
 OUT = ROOT / "index.html"
 
 IMG_RE = re.compile(r'!\[([^\]]*)\]\(([^)\s]+)\)')
-EXT_MIME = {"png": "png", "jpg": "jpeg", "jpeg": "jpeg", "svg": "svg+xml", "webp": "webp"}
+EXT_MIME = {"png": "png", "jpg": "jpeg", "jpeg": "jpeg", "webp": "webp"}
+
+# Every excalidraw-exported SVG embeds its own copy of the same ~13KB Cascadia
+# woff2 font. With dozens of diagrams that duplication alone was on track to
+# blow past the 16MB artifact limit. The template declares this font ONCE
+# (same font-family name), so we strip each SVG's own @font-face block here
+# and inline the SVG's markup directly (not as a data-URI <img>, which can't
+# see page-level CSS) so it picks up the shared font instead.
+SVG_FONT_FACE_RE = re.compile(r'<defs><style class="style-fonts">.*?</style></defs>', re.S)
+
+
+def _html_escape_attr(s):
+    return s.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def embed_local_images(md_text, base_dir):
-    """Rewrite ![alt](relative/path.png) into an inlined base64 data URI,
-    resolved relative to base_dir. Leaves http(s)/data: URLs untouched.
+    """Rewrite ![alt](relative/path.ext), resolved relative to base_dir, into
+    either inline SVG markup (font-face stripped, see above) or a base64
+    data-URI <img> for raster formats. Leaves http(s)/data: URLs untouched.
     Silently leaves the reference as-is if the file doesn't exist."""
 
     def repl(m):
@@ -30,6 +43,10 @@ def embed_local_images(md_text, base_dir):
         if not img_path.exists():
             return m.group(0)
         ext = img_path.suffix.lstrip(".").lower()
+        if ext == "svg":
+            svg_markup = SVG_FONT_FACE_RE.sub("", img_path.read_text(encoding="utf-8"), count=1)
+            caption = _html_escape_attr(alt)
+            return f'<div class="svg-embed" data-caption="{caption}">{svg_markup}</div>'
         mime = EXT_MIME.get(ext, "png")
         b64 = base64.b64encode(img_path.read_bytes()).decode("ascii")
         return f"![{alt}](data:image/{mime};base64,{b64})"
