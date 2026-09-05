@@ -11,7 +11,7 @@ from taxonomy import CATEGORIES
 # location (and inside the Cowork VM, where the folder is mounted elsewhere).
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = Path(__file__).parent / "field-guide-template.html"
-OUT = ROOT / "field-guide.html"
+OUT = ROOT / "index.html"
 
 IMG_RE = re.compile(r'!\[([^\]]*)\]\(([^)\s]+)\)')
 EXT_MIME = {"png": "png", "jpg": "jpeg", "jpeg": "jpeg", "svg": "svg+xml", "webp": "webp"}
