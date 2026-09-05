@@ -1,4 +1,5 @@
-"""Full 70-topic taxonomy for the System Design Field Guide.
+"""Full taxonomy for the System Design Field Guide (originally 70 topics;
+grew via `hld-building-blocks-gaps.md`'s research-backed additions).
 
 Each category has an id/label/color-token and a list of items.
 Item kinds:
