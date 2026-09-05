@@ -31,6 +31,7 @@ CATEGORIES = [
             {"slug": "sync-vs-async-communication", "label": "Synchronous vs Asynchronous Communication"},
             {"slug": "rest-vs-rpc-vs-graphql", "label": "REST vs RPC vs GraphQL"},
             {"slug": "latency-throughput-cap", "label": "Latency, Throughput & the CAP Theorem"},
+            {"slug": "back-of-envelope-estimation", "label": "Back-of-the-Envelope Estimation"},
         ],
     },
     {
@@ -50,6 +51,11 @@ CATEGORIES = [
             {"slug": "consistent-hashing", "label": "Consistent Hashing"},
             {"slug": "data-partitioning-sharding", "label": "Data Partitioning & Sharding"},
             {"slug": "replication-consensus", "label": "Replication & Consensus"},
+            {"slug": "consistency-models", "label": "Consistency Models"},
+            {"slug": "distributed-transactions-saga", "label": "Distributed Transactions: 2PC, Saga & Compensation"},
+            {"slug": "transactional-outbox-cdc", "label": "The Transactional Outbox & Change Data Capture"},
+            {"slug": "authn-authz-hld", "label": "AuthN & AuthZ at the HLD Layer"},
+            {"slug": "dns-global-traffic", "label": "DNS, Anycast & Global Traffic Management"},
         ],
     },
     {
@@ -67,6 +73,7 @@ CATEGORIES = [
             {"slug": "object-blob-storage", "label": "Object / Blob Storage & Large Uploads"},
             {"slug": "long-polling-websockets-sse", "label": "Long Polling, WebSockets & SSE"},
             {"slug": "search-inverted-indexes", "label": "Search & Inverted Indexes"},
+            {"slug": "backpressure-load-shedding", "label": "Backpressure, Load Shedding & Bulkheads"},
         ],
     },
     {
