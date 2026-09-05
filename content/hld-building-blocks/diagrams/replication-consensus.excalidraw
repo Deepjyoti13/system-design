@@ -1,0 +1,69 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "elements": [
+    {"id":"title","type":"text","x":40,"y":30,"width":560,"height":32,"text":"Replication & Consensus","originalText":"Replication & Consensus","fontSize":26,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#1e40af","backgroundColor":"transparent","opacity":100,"seed":1},
+    {"id":"subtitle","type":"text","x":40,"y":70,"width":900,"height":20,"text":"Sync vs async replication, and why majority quorum prevents split-brain","originalText":"Sync vs async replication, and why majority quorum prevents split-brain","fontSize":15,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#64748b","backgroundColor":"transparent","opacity":100,"seed":2},
+
+    {"id":"zoneA_header","type":"text","x":40,"y":120,"width":700,"height":26,"text":"Single-Leader Replication: Sync vs Async","originalText":"Single-Leader Replication: Sync vs Async","fontSize":20,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#1e40af","backgroundColor":"transparent","opacity":100,"seed":3},
+
+    {"id":"client_shape","type":"ellipse","x":40,"y":190,"width":150,"height":70,"strokeColor":"#c2410c","backgroundColor":"#fed7aa","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":10},
+    {"id":"client_text","type":"text","x":86,"y":215,"width":58,"height":20,"text":"Client","originalText":"Client","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#374151","backgroundColor":"transparent","opacity":100,"seed":11},
+
+    {"id":"leader_shape","type":"rectangle","x":330,"y":190,"width":190,"height":70,"strokeColor":"#1e3a5f","backgroundColor":"#3b82f6","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":12},
+    {"id":"leader_text","type":"text","x":396,"y":215,"width":58,"height":20,"text":"Leader","originalText":"Leader","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#ffffff","backgroundColor":"transparent","opacity":100,"seed":13},
+
+    {"id":"replicaA_shape","type":"rectangle","x":700,"y":100,"width":190,"height":70,"strokeColor":"#1e3a5f","backgroundColor":"#60a5fa","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":14},
+    {"id":"replicaA_text","type":"text","x":752,"y":125,"width":87,"height":20,"text":"Replica A","originalText":"Replica A","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#ffffff","backgroundColor":"transparent","opacity":100,"seed":15},
+
+    {"id":"replicaB_shape","type":"rectangle","x":700,"y":290,"width":190,"height":70,"strokeColor":"#1e3a5f","backgroundColor":"#60a5fa","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":16},
+    {"id":"replicaB_text","type":"text","x":752,"y":315,"width":87,"height":20,"text":"Replica B","originalText":"Replica B","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#ffffff","backgroundColor":"transparent","opacity":100,"seed":17},
+
+    {"id":"arrow_client_leader","type":"arrow","x":190,"y":225,"width":140,"height":0.1,"points":[[0,0],[140,0]],"strokeColor":"#1e3a5f","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"opacity":100,"startArrowhead":null,"endArrowhead":"triangle","seed":20},
+    {"id":"arrow_write_label","type":"text","x":198,"y":200,"width":63,"height":18,"text":"write(x)","originalText":"write(x)","fontSize":13,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#64748b","backgroundColor":"transparent","opacity":100,"seed":21},
+
+    {"id":"arrow_sync","type":"arrow","x":520,"y":205,"width":180,"height":70,"points":[[0,0],[180,-70]],"strokeColor":"#047857","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"opacity":100,"startArrowhead":null,"endArrowhead":"triangle","seed":22},
+    {"id":"arrow_sync_label","type":"text","x":558,"y":150,"width":141,"height":18,"text":"sync: wait for ack","originalText":"sync: wait for ack","fontSize":13,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#047857","backgroundColor":"transparent","opacity":100,"seed":23},
+
+    {"id":"arrow_async","type":"arrow","x":520,"y":245,"width":180,"height":80,"points":[[0,0],[180,80]],"strokeColor":"#dc2626","backgroundColor":"transparent","strokeWidth":2,"roughness":0,"opacity":100,"strokeStyle":"dashed","startArrowhead":null,"endArrowhead":"triangle","seed":24},
+    {"id":"arrow_async_label","type":"text","x":555,"y":292,"width":175,"height":18,"text":"async: fire-and-forget","originalText":"async: fire-and-forget","fontSize":13,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#dc2626","backgroundColor":"transparent","opacity":100,"seed":25},
+
+    {"id":"evidenceA_box","type":"rectangle","x":40,"y":400,"width":900,"height":140,"strokeColor":"#1e293b","backgroundColor":"#1e293b","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"seed":30},
+    {"id":"evA_l1","type":"text","x":60,"y":415,"width":830,"height":18,"text":"SYNC: confirms only after a replica acks -- write is durable on 2 nodes before the client hears","originalText":"SYNC: confirms only after a replica acks -- write is durable on 2 nodes before the client hears","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","backgroundColor":"transparent","opacity":100,"seed":31},
+    {"id":"evA_l2","type":"text","x":60,"y":438,"width":700,"height":18,"text":"success. Cost: every write pays the replica's round trip, permanently.","originalText":"success. Cost: every write pays the replica's round trip, permanently.","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","backgroundColor":"transparent","opacity":100,"seed":32},
+    {"id":"evA_l3","type":"text","x":60,"y":470,"width":830,"height":18,"text":"ASYNC: confirms before the replica has it. If the leader crashes between confirm and replicate,","originalText":"ASYNC: confirms before the replica has it. If the leader crashes between confirm and replicate,","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#f87171","backgroundColor":"transparent","opacity":100,"seed":33},
+    {"id":"evA_l4","type":"text","x":60,"y":493,"width":830,"height":18,"text":"that write is gone -- despite the client being told it succeeded. That's replication lag's real cost.","originalText":"that write is gone -- despite the client being told it succeeded. That's replication lag's real cost.","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#f87171","backgroundColor":"transparent","opacity":100,"seed":34},
+
+    {"id":"zoneB_header","type":"text","x":40,"y":580,"width":700,"height":26,"text":"Why Majority Quorum Prevents Split-Brain","originalText":"Why Majority Quorum Prevents Split-Brain","fontSize":20,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#1e40af","backgroundColor":"transparent","opacity":100,"seed":40},
+
+    {"id":"n1_shape","type":"rectangle","x":60,"y":650,"width":130,"height":70,"strokeColor":"#1e3a5f","backgroundColor":"#3b82f6","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":50},
+    {"id":"n1_text","type":"text","x":115,"y":675,"width":20,"height":20,"text":"N1","originalText":"N1","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#ffffff","backgroundColor":"transparent","opacity":100,"seed":51},
+
+    {"id":"n2_shape","type":"rectangle","x":230,"y":650,"width":130,"height":70,"strokeColor":"#1e3a5f","backgroundColor":"#3b82f6","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":52},
+    {"id":"n2_text","type":"text","x":285,"y":675,"width":20,"height":20,"text":"N2","originalText":"N2","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#ffffff","backgroundColor":"transparent","opacity":100,"seed":53},
+
+    {"id":"n3_shape","type":"rectangle","x":400,"y":650,"width":130,"height":70,"strokeColor":"#1e3a5f","backgroundColor":"#3b82f6","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":54},
+    {"id":"n3_text","type":"text","x":455,"y":675,"width":20,"height":20,"text":"N3","originalText":"N3","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#ffffff","backgroundColor":"transparent","opacity":100,"seed":55},
+
+    {"id":"partition_line","type":"line","x":565,"y":630,"width":0.1,"height":110,"points":[[0,0],[0,110]],"strokeColor":"#dc2626","backgroundColor":"transparent","strokeWidth":2,"strokeStyle":"dashed","roughness":0,"opacity":100,"seed":56},
+    {"id":"partition_label","type":"text","x":505,"y":605,"width":95,"height":18,"text":"partition","originalText":"partition","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#dc2626","backgroundColor":"transparent","opacity":100,"seed":57},
+
+    {"id":"n4_shape","type":"rectangle","x":610,"y":650,"width":180,"height":70,"strokeColor":"#dc2626","backgroundColor":"#fee2e2","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":58},
+    {"id":"n4_text","type":"text","x":628,"y":675,"width":144,"height":20,"text":"N4 (old leader)","originalText":"N4 (old leader)","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#374151","backgroundColor":"transparent","opacity":100,"seed":59},
+
+    {"id":"n5_shape","type":"rectangle","x":830,"y":650,"width":130,"height":70,"strokeColor":"#1e3a5f","backgroundColor":"#3b82f6","fillStyle":"solid","strokeWidth":2,"roughness":0,"opacity":100,"seed":60},
+    {"id":"n5_text","type":"text","x":885,"y":675,"width":20,"height":20,"text":"N5","originalText":"N5","fontSize":16,"fontFamily":3,"textAlign":"center","verticalAlign":"middle","strokeColor":"#ffffff","backgroundColor":"transparent","opacity":100,"seed":61},
+
+    {"id":"majority_label","type":"text","x":60,"y":735,"width":400,"height":20,"text":"3 of 5 = MAJORITY -> can elect a new leader","originalText":"3 of 5 = MAJORITY -> can elect a new leader","fontSize":15,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#047857","backgroundColor":"transparent","opacity":100,"seed":62},
+    {"id":"minority_label","type":"text","x":610,"y":735,"width":340,"height":20,"text":"2 of 5 = minority -> cannot reach quorum","originalText":"2 of 5 = minority -> cannot reach quorum","fontSize":15,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#dc2626","backgroundColor":"transparent","opacity":100,"seed":63},
+
+    {"id":"evidenceB_box","type":"rectangle","x":40,"y":800,"width":920,"height":140,"strokeColor":"#1e293b","backgroundColor":"#1e293b","fillStyle":"solid","strokeWidth":1,"roughness":0,"opacity":100,"seed":70},
+    {"id":"evB_l1","type":"text","x":60,"y":815,"width":730,"height":18,"text":"Raft/Paxos rule: a decision is final only once a MAJORITY of all nodes agrees to it.","originalText":"Raft/Paxos rule: a decision is final only once a MAJORITY of all nodes agrees to it.","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","backgroundColor":"transparent","opacity":100,"seed":71},
+    {"id":"evB_l2","type":"text","x":60,"y":840,"width":750,"height":18,"text":"The 3-node side has a majority -- it can elect a new leader and keep accepting writes.","originalText":"The 3-node side has a majority -- it can elect a new leader and keep accepting writes.","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#4ade80","backgroundColor":"transparent","opacity":100,"seed":72},
+    {"id":"evB_l3","type":"text","x":60,"y":872,"width":730,"height":18,"text":"The 2-node side (with the old leader) can never reach majority while partitioned --","originalText":"The 2-node side (with the old leader) can never reach majority while partitioned --","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#f87171","backgroundColor":"transparent","opacity":100,"seed":73},
+    {"id":"evB_l4","type":"text","x":60,"y":895,"width":800,"height":18,"text":"it can't confirm new writes as leader, so two conflicting leaders can never both be active.","originalText":"it can't confirm new writes as leader, so two conflicting leaders can never both be active.","fontSize":14,"fontFamily":3,"textAlign":"left","verticalAlign":"top","strokeColor":"#f87171","backgroundColor":"transparent","opacity":100,"seed":74}
+  ],
+  "appState": {"viewBackgroundColor": "#ffffff", "gridSize": 20},
+  "files": {}
+}

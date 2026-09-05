@@ -1,0 +1,116 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "system-design-interview-skill",
+  "elements": [
+    {
+      "type": "text", "id": "title", "x": 100, "y": 60, "width": 650, "height": 35,
+      "text": "What the user sees", "originalText": "What the user sees",
+      "fontSize": 28, "fontFamily": 3, "textAlign": "left", "verticalAlign": "top",
+      "strokeColor": "#1e40af", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100001, "version": 1, "versionNonce": 100002, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "subtitle", "x": 100, "y": 105, "width": 660, "height": 45,
+      "text": "Every tap flips one boolean per (user, post) and the number next to it\nupdates almost instantly — no queue, cache, or shard is visible here.",
+      "originalText": "Every tap flips one boolean per (user, post) and the number next to it\nupdates almost instantly — no queue, cache, or shard is visible here.",
+      "fontSize": 16, "fontFamily": 3, "textAlign": "left", "verticalAlign": "top",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100003, "version": 1, "versionNonce": 100004, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.3
+    },
+    {
+      "type": "rectangle", "id": "card1", "x": 100, "y": 190, "width": 220, "height": 160,
+      "strokeColor": "#1e3a5f", "backgroundColor": "#93c5fd", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100010, "version": 1, "versionNonce": 100011, "isDeleted": false,
+      "groupIds": [], "boundElements": [], "link": null, "locked": false, "roundness": {"type": 3}
+    },
+    {
+      "type": "text", "id": "heart1", "x": 170, "y": 215, "width": 80, "height": 55,
+      "text": "♡", "originalText": "♡",
+      "fontSize": 44, "fontFamily": 3, "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#64748b", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100012, "version": 1, "versionNonce": 100013, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "count1", "x": 140, "y": 295, "width": 140, "height": 25,
+      "text": "128 likes", "originalText": "128 likes",
+      "fontSize": 18, "fontFamily": 3, "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#374151", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100014, "version": 1, "versionNonce": 100015, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "caption1", "x": 150, "y": 360, "width": 200, "height": 25,
+      "text": "before tap", "originalText": "before tap",
+      "fontSize": 14, "fontFamily": 3, "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#3b82f6", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100016, "version": 1, "versionNonce": 100017, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    },
+    {
+      "type": "rectangle", "id": "card2", "x": 520, "y": 190, "width": 220, "height": 160,
+      "strokeColor": "#1e3a5f", "backgroundColor": "#93c5fd", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100020, "version": 1, "versionNonce": 100021, "isDeleted": false,
+      "groupIds": [], "boundElements": [], "link": null, "locked": false, "roundness": {"type": 3}
+    },
+    {
+      "type": "text", "id": "heart2", "x": 590, "y": 215, "width": 80, "height": 55,
+      "text": "♥", "originalText": "♥",
+      "fontSize": 44, "fontFamily": 3, "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#b91c1c", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100022, "version": 1, "versionNonce": 100023, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "count2", "x": 560, "y": 295, "width": 140, "height": 25,
+      "text": "129 likes", "originalText": "129 likes",
+      "fontSize": 18, "fontFamily": 3, "textAlign": "center", "verticalAlign": "middle",
+      "strokeColor": "#374151", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100024, "version": 1, "versionNonce": 100025, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    },
+    {
+      "type": "text", "id": "caption2", "x": 570, "y": 360, "width": 200, "height": 25,
+      "text": "after tap", "originalText": "after tap",
+      "fontSize": 14, "fontFamily": 3, "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#3b82f6", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100026, "version": 1, "versionNonce": 100027, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    },
+    {
+      "type": "arrow", "id": "toggleArrow", "x": 320, "y": 260, "width": 200, "height": 0,
+      "strokeColor": "#1e3a5f", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100030, "version": 1, "versionNonce": 100031, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false,
+      "points": [[0, 0], [200, 0]],
+      "startBinding": {"elementId": "card1", "focus": 0, "gap": 4},
+      "endBinding": {"elementId": "card2", "focus": 0, "gap": 4},
+      "startArrowhead": "arrow", "endArrowhead": "arrow"
+    },
+    {
+      "type": "text", "id": "arrowLabel", "x": 320, "y": 225, "width": 200, "height": 25,
+      "text": "tap toggles like state", "originalText": "tap toggles like state",
+      "fontSize": 14, "fontFamily": 3, "textAlign": "center", "verticalAlign": "top",
+      "strokeColor": "#3b82f6", "backgroundColor": "transparent", "fillStyle": "solid",
+      "strokeWidth": 1, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "angle": 0,
+      "seed": 100032, "version": 1, "versionNonce": 100033, "isDeleted": false,
+      "groupIds": [], "boundElements": null, "link": null, "locked": false, "lineHeight": 1.25
+    }
+  ],
+  "appState": { "viewBackgroundColor": "#ffffff", "gridSize": 20 },
+  "files": {}
+}

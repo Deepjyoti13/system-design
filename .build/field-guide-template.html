@@ -1,0 +1,575 @@
+<title>System Design Field Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface-2: #eef1f4;
+    --border: #dde2e8;
+    --text: #1a2129;
+    --text-muted: #5b6770;
+    --accent: #0f9d8f;
+    --accent-soft: #0f9d8f1a;
+    --accent-2: #3355cc;
+    --accent-2-soft: #3355cc1a;
+    --cat-orange: #c2540c;
+    --cat-green: #2f9e44;
+    --cat-violet: #7c4fe0;
+    --cat-rose: #c22d68;
+    --cat-amber: #a17700;
+    --cat-slate: #55636f;
+    --code-bg: #f0f2f5;
+    --shadow: 0 1px 2px rgba(20, 24, 28, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b0f14;
+      --surface: #121821;
+      --surface-2: #1a2129;
+      --border: #232c37;
+      --text: #e7edf3;
+      --text-muted: #8a97a6;
+      --accent: #33d6c0;
+      --accent-soft: #33d6c020;
+      --accent-2: #6f93ff;
+      --accent-2-soft: #6f93ff20;
+      --cat-orange: #ff922b;
+      --cat-green: #51cf66;
+      --cat-violet: #b197fc;
+      --cat-rose: #f472a0;
+      --cat-amber: #e0b23d;
+      --cat-slate: #93a3b3;
+      --code-bg: #0d1117;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0f14;
+    --surface: #121821;
+    --surface-2: #1a2129;
+    --border: #232c37;
+    --text: #e7edf3;
+    --text-muted: #8a97a6;
+    --accent: #33d6c0;
+    --accent-soft: #33d6c020;
+    --accent-2: #6f93ff;
+    --accent-2-soft: #6f93ff20;
+    --cat-orange: #ff922b;
+    --cat-green: #51cf66;
+    --cat-violet: #b197fc;
+    --cat-rose: #f472a0;
+    --cat-amber: #e0b23d;
+    --cat-slate: #93a3b3;
+    --code-bg: #0d1117;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace; }
+
+  #app { display: flex; height: 100vh; }
+
+  /* ---------- Sidebar ---------- */
+  #sidebar {
+    width: 300px;
+    flex: none;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #brand {
+    padding: 22px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  #brand .mark {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    cursor: pointer;
+  }
+  #brand .mark .dot {
+    width: 9px; height: 9px; border-radius: 2px;
+    background: var(--accent);
+    flex: none;
+  }
+  #brand p {
+    margin: 10px 0 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+  #search-wrap { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  #search {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 8px 10px 8px 30px;
+    font-size: 13px;
+    font-family: "IBM Plex Mono", monospace;
+    outline: none;
+  }
+  #search:focus { border-color: var(--accent); }
+  #search-wrap { position: relative; }
+  #search-wrap svg { position: absolute; left: 27px; top: 22px; opacity: 0.5; pointer-events: none; }
+
+  #nav { flex: 1; overflow-y: auto; padding: 8px 0 16px; }
+  .nav-section { margin-top: 10px; }
+  .nav-section-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 6px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+  .nav-section-head .dot { width: 7px; height: 7px; border-radius: 2px; flex: none; }
+  .nav-section-head .count { margin-left: auto; opacity: 0.7; font-weight: 400; }
+
+  .nav-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px 8px 20px;
+    border: none;
+    background: none;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.4;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .nav-item .num { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--cat-amber); flex: none; padding-top: 1px; }
+  .nav-item:hover { background: var(--surface-2); }
+  .nav-item.active { background: var(--accent-soft); color: var(--accent); }
+  .nav-item.active .num { color: var(--accent); }
+  .nav-item.hidden { display: none; }
+  .nav-section.hidden { display: none; }
+
+  #sidebar-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  /* ---------- Content ---------- */
+  #content { flex: 1; overflow-y: auto; }
+  #content-inner { max-width: 780px; margin: 0 auto; padding: 48px 40px 100px; }
+
+  /* Landing */
+  .landing-eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin: 0 0 14px;
+  }
+  .landing h1 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 34px;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  .landing .lede { font-size: 16px; line-height: 1.7; color: var(--text-muted); max-width: 640px; margin: 0 0 40px; }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .card:hover { border-color: var(--accent); }
+  .card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .card-head .dot { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+  .card-head h3 { margin: 0; font-family: "IBM Plex Mono", monospace; font-size: 14.5px; font-weight: 600; }
+  .card p { margin: 0 0 12px; font-size: 13.5px; line-height: 1.6; color: var(--text-muted); }
+  .card .count { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--text-muted); }
+
+  /* Topic hero + tabs */
+  .topic-hero h1 {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 26px;
+    line-height: 1.3;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .topic-hero .lede { font-size: 14.5px; line-height: 1.65; color: var(--text-muted); margin: 0 0 24px; }
+  .tabstrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  .tab {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { background: var(--accent-2-soft); border-color: var(--accent-2); color: var(--accent-2); }
+
+  .breadcrumb {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    letter-spacing: 0.02em;
+  }
+  .breadcrumb .sep { margin: 0 6px; opacity: 0.5; }
+  .breadcrumb .current { color: var(--text); }
+
+  /* Prose (rendered markdown) */
+  .prose { font-size: 15.5px; line-height: 1.75; }
+  .prose h1 { font-family: "IBM Plex Mono", monospace; font-size: 24px; margin: 0 0 18px; text-wrap: balance; }
+  .prose h2 { font-family: "IBM Plex Mono", monospace; font-size: 18px; margin: 40px 0 14px; padding-top: 4px; }
+  .prose h3 { font-family: "IBM Plex Mono", monospace; font-size: 15px; margin: 28px 0 10px; color: var(--text); }
+  .prose p { margin: 0 0 16px; color: var(--text); max-width: 68ch; }
+  .prose ul, .prose ol { margin: 0 0 16px; padding-left: 22px; }
+  .prose li { margin: 0 0 8px; max-width: 66ch; }
+  .prose li > ul, .prose li > ol { margin-top: 8px; }
+  .prose strong { font-weight: 600; }
+  .prose a { color: var(--accent-2); text-decoration-color: var(--accent-2-soft); text-underline-offset: 2px; }
+  .prose code { font-family: "IBM Plex Mono", monospace; font-size: 0.86em; background: var(--code-bg); padding: 2px 5px; border-radius: 4px; }
+  .prose pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; overflow-x: auto; margin: 0 0 20px; }
+  .prose pre code { background: none; padding: 0; font-size: 13px; line-height: 1.6; }
+  .prose blockquote { margin: 0 0 16px; padding: 2px 0 2px 16px; border-left: 3px solid var(--border); color: var(--text-muted); }
+  .prose hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  .table-wrap { overflow-x: auto; margin: 0 0 22px; border: 1px solid var(--border); border-radius: 8px; }
+  .prose table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .prose th, .prose td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .prose th { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); background: var(--surface-2); }
+  .prose tr:last-child td { border-bottom: none; }
+  .prose details { margin: 0 0 16px; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; }
+  .prose summary { cursor: pointer; font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--accent-2); }
+
+  .diagram-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent-2-soft);
+    border: 1px solid var(--accent-2);
+    color: var(--accent-2) !important;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 0 0 20px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    text-decoration: none !important;
+    width: fit-content;
+  }
+  .diagram-card:hover { background: var(--accent-2-soft); filter: brightness(1.08); }
+
+  .diagram-accordion {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 0 0 24px;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .diagram-accordion summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--accent-2);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .diagram-accordion summary::-webkit-details-marker { display: none; }
+  .diagram-accordion summary::before {
+    content: "▸";
+    display: inline-block;
+    transition: transform 0.15s ease;
+    color: var(--text-muted);
+  }
+  .diagram-accordion[open] summary::before { transform: rotate(90deg); }
+  .diagram-accordion .diagram-body {
+    padding: 4px 16px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .diagram-accordion .diagram-body img {
+    display: block;
+    width: 100%;
+    border-radius: 6px;
+    margin-top: 12px;
+    background: #fff;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  @media (max-width: 760px) {
+    #sidebar { position: fixed; z-index: 5; height: 100%; transform: translateX(-100%); transition: transform 0.2s; }
+    #sidebar.open { transform: translateX(0); }
+    .card-grid { grid-template-columns: 1fr; }
+    #content-inner { padding: 32px 20px 80px; }
+  }
+</style>
+
+<div id="app">
+  <aside id="sidebar">
+    <div id="brand">
+      <div class="mark" id="brand-link"><span class="dot"></span>SYSTEM DESIGN FIELD GUIDE</div>
+      <p>HLD, LLD &amp; database design, worked from first principles — with a diagram for every idea.</p>
+    </div>
+    <div id="search-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="search" class="mono" placeholder="Search topics..." autocomplete="off">
+    </div>
+    <nav id="nav"></nav>
+    <div id="sidebar-footer">Original explanations &amp; diagrams, worked from one running example per topic.</div>
+  </aside>
+  <main id="content"><div id="content-inner"></div></main>
+</div>
+
+<script>
+const PAGES = __PAGES_JSON__;
+const NAV = __NAV_JSON__;
+const PAGE_DIAGRAMS = __PAGE_DIAGRAMS_JSON__;
+
+marked.setOptions({ gfm: true, breaks: false });
+
+function renderMarkdown(md, pageId) {
+  const html = marked.parse(md);
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  wrap.querySelectorAll('table').forEach(t => {
+    const d = document.createElement('div');
+    d.className = 'table-wrap';
+    t.parentNode.insertBefore(d, t);
+    d.appendChild(t);
+  });
+  const diagramSrcs = PAGE_DIAGRAMS[pageId] || [];
+  let diagramIdx = 0;
+  wrap.querySelectorAll('a').forEach(a => {
+    const href = a.getAttribute('href') || '';
+    if (href.startsWith('https://claude.ai/code/artifact/')) {
+      const label = a.textContent;
+      const diagramSrc = diagramSrcs[diagramIdx];
+      if (diagramSrc !== undefined) {
+        diagramIdx++;
+        const details = document.createElement('details');
+        details.className = 'diagram-accordion';
+        details.open = true;
+        details.innerHTML = `<summary>${label}</summary><div class="diagram-body"><img src="${diagramSrc}" alt="${label}" loading="lazy"></div>`;
+        a.replaceWith(details);
+      } else {
+        a.classList.add('diagram-card');
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.innerHTML = '↗ ' + label;
+      }
+    } else if (href.startsWith('http')) {
+      a.target = '_blank';
+      a.rel = 'noopener';
+    }
+  });
+  wrap.querySelectorAll('img').forEach(img => {
+    if (img.closest('.diagram-accordion')) return;
+    const label = img.getAttribute('alt') || 'Diagram';
+    const details = document.createElement('details');
+    details.className = 'diagram-accordion';
+    details.open = true;
+    details.innerHTML = `<summary>${label}</summary><div class="diagram-body"></div>`;
+    const parent = img.parentNode;
+    parent.insertBefore(details, img);
+    details.querySelector('.diagram-body').appendChild(img);
+    if (parent.tagName === 'P' && !parent.textContent.trim() && !parent.querySelector('img')) {
+      parent.remove();
+    }
+  });
+  return wrap.innerHTML;
+}
+
+let currentTopicId = null;
+let currentTabId = null;
+
+function buildNav() {
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  NAV.sections.forEach(section => {
+    const sec = document.createElement('div');
+    sec.className = 'nav-section';
+    sec.dataset.section = section.id;
+    const head = document.createElement('div');
+    head.className = 'nav-section-head';
+    head.innerHTML = `<span class="dot" style="background:${section.color}"></span>${section.label}<span class="count">${section.items.length}</span>`;
+    sec.appendChild(head);
+    section.items.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'nav-item';
+      if (item.kind === 'topic') btn.dataset.topicId = item.topicId;
+      else btn.dataset.pageId = item.pageId;
+      btn.dataset.search = item.label.toLowerCase();
+      const marker = item.star ? '<span class="num" title="Full interview depth">★</span>' : '';
+      btn.innerHTML = `${marker}<span>${item.label}</span>`;
+      btn.addEventListener('click', () => {
+        if (item.kind === 'topic') openTopic(item.topicId);
+        else openSingle(item.pageId, section.label, item.label);
+      });
+      sec.appendChild(btn);
+    });
+    nav.appendChild(sec);
+  });
+}
+
+function setActive(topicId, pageId) {
+  document.querySelectorAll('.nav-item').forEach(el => {
+    const isActive = topicId ? el.dataset.topicId === topicId : (!!pageId && el.dataset.pageId === pageId);
+    el.classList.toggle('active', isActive);
+  });
+}
+
+function openSingle(pageId, sectionLabel, itemLabel) {
+  currentTopicId = null;
+  const page = PAGES[pageId];
+  setActive(null, pageId);
+  const inner = document.getElementById('content-inner');
+  inner.innerHTML = `
+    <div class="breadcrumb">${sectionLabel}<span class="sep">/</span><span class="current">${itemLabel}</span></div>
+    <div class="prose">${renderMarkdown(page.md, pageId)}</div>
+  `;
+  document.getElementById('content').scrollTop = 0;
+  history.replaceState(null, '', '#' + pageId);
+}
+
+function openTopic(topicId, tabId) {
+  const topic = NAV.topics[topicId];
+  currentTopicId = topicId;
+  currentTabId = tabId || topic.tabs[0].pageId;
+  setActive(topicId, null);
+  render();
+
+  function render() {
+    const inner = document.getElementById('content-inner');
+    const tabsHtml = topic.tabs.map(t =>
+      `<div class="tab ${t.pageId === currentTabId ? 'active' : ''}" data-tab="${t.pageId}">${t.label}</div>`
+    ).join('');
+    const page = PAGES[currentTabId];
+    inner.innerHTML = `
+      <div class="breadcrumb">${topic.sectionLabel}<span class="sep">/</span><span class="current">${topic.label}</span></div>
+      <div class="topic-hero">
+        <h1>${topic.label}</h1>
+        <p class="lede">${topic.lede}</p>
+      </div>
+      <div class="tabstrip">${tabsHtml}</div>
+      <div class="prose">${renderMarkdown(page.md, currentTabId)}</div>
+    `;
+    inner.querySelectorAll('.tab').forEach(el => {
+      el.addEventListener('click', () => {
+        currentTabId = el.dataset.tab;
+        history.replaceState(null, '', '#' + currentTabId);
+        render();
+        document.getElementById('content').scrollTop = 0;
+      });
+    });
+    document.getElementById('content').scrollTop = 0;
+    history.replaceState(null, '', '#' + currentTabId);
+  }
+}
+
+function openLanding() {
+  currentTopicId = null;
+  setActive(null, null);
+  const inner = document.getElementById('content-inner');
+  const cards = NAV.sections.map(s => `
+    <div class="card" data-jump="${s.id}">
+      <div class="card-head"><span class="dot" style="background:${s.color}"></span><h3>${s.label}</h3></div>
+      <p>${s.blurb}</p>
+      <div class="count">${s.items.length} ${s.items.length === 1 ? 'topic' : 'topics'}</div>
+    </div>
+  `).join('');
+  inner.innerHTML = `
+    <div class="landing">
+      <p class="landing-eyebrow">// system-design</p>
+      <h1>${NAV.landing.title}</h1>
+      <p class="lede">${NAV.landing.lede}</p>
+      <div class="card-grid">${cards}</div>
+    </div>
+  `;
+  inner.querySelectorAll('.card').forEach(el => {
+    el.addEventListener('click', () => {
+      const section = NAV.sections.find(s => s.id === el.dataset.jump);
+      const first = section.items[0];
+      if (first.kind === 'topic') openTopic(first.topicId);
+      else openSingle(first.pageId, section.label, first.label);
+    });
+  });
+  document.getElementById('content').scrollTop = 0;
+  history.replaceState(null, '', '#');
+}
+
+document.getElementById('brand-link').addEventListener('click', openLanding);
+
+document.getElementById('search').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('.nav-section').forEach(sec => {
+    let any = false;
+    sec.querySelectorAll('.nav-item').forEach(item => {
+      const match = !q || item.dataset.search.includes(q);
+      item.classList.toggle('hidden', !match);
+      if (match) any = true;
+    });
+    sec.classList.toggle('hidden', !any);
+  });
+});
+
+function boot() {
+  buildNav();
+  const hash = location.hash.replace('#', '');
+  if (!hash) { openLanding(); return; }
+  if (PAGES[hash]) {
+    const owner = NAV.pageOwner[hash];
+    if (owner && owner.kind === 'topic') openTopic(owner.topicId, hash);
+    else if (owner) openSingle(hash, owner.sectionLabel, owner.itemLabel);
+    else openLanding();
+  } else {
+    openLanding();
+  }
+}
+boot();
+</script>

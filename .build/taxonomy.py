@@ -1,0 +1,161 @@
+"""Full 70-topic taxonomy for the System Design Field Guide.
+
+Each category has an id/label/color-token and a list of items.
+Item kinds:
+  - "single": one markdown page. Default. File path is derived from
+    category (see build_field_guide.py: folder-style categories get
+    content/<cat>/<slug>/README.md, flat categories get
+    content/<cat>/<slug>.md). Local images referenced in the markdown
+    (e.g. ![...](diagrams/foo.png)) are resolved relative to that file
+    and inlined as base64 at build time -- no Artifact publish needed.
+  - "topic-urlshortener": the one pre-existing multi-tab case study,
+    reusing the root-level 01-04-fundamentals.md files as-is.
+  - "topic-module6": the Real-World Deep Dives shape (6 tabs:
+    00-overview / 01-architecture-hld / 02-lld / 03-db-design /
+    04-interviewer-qna / README), at a root-level folder named `dir`.
+
+`star` marks the 11 topics written to full interview depth (8 sections
+for "single" ones; the url-shortener one predates this scheme and keeps
+its own 4-tab shape).
+"""
+
+CATEGORIES = [
+    {
+        "id": "foundations",
+        "label": "Foundations",
+        "color": "var(--accent)",
+        "blurb": "The vocabulary and physics of distributed systems: how clients and servers talk, which API style to reach for, and the hard limits latency and the CAP theorem put on every design.",
+        "items": [
+            {"slug": "client-server-model", "label": "The Client-Server Model"},
+            {"slug": "stateless-vs-stateful", "label": "Stateless vs Stateful Services"},
+            {"slug": "sync-vs-async-communication", "label": "Synchronous vs Asynchronous Communication"},
+            {"slug": "rest-vs-rpc-vs-graphql", "label": "REST vs RPC vs GraphQL"},
+            {"slug": "latency-throughput-cap", "label": "Latency, Throughput & the CAP Theorem"},
+        ],
+    },
+    {
+        "id": "hld-building-blocks",
+        "label": "HLD Building Blocks",
+        "color": "var(--accent-2)",
+        "blurb": "The reusable components every high-level design leans on: load balancers, caches, CDNs, queues, gateways, sharding and replication.",
+        "items": [
+            {"slug": "load-balancing", "label": "Load Balancing"},
+            {"slug": "caching-strategies", "label": "Caching Strategies"},
+            {"slug": "cdn", "label": "Content Delivery Networks (CDN)"},
+            {"slug": "forward-reverse-proxies", "label": "Forward & Reverse Proxies"},
+            {"slug": "api-gateway", "label": "API Gateway"},
+            {"slug": "message-queues-pubsub", "label": "Message Queues & Pub/Sub"},
+            {"slug": "kafka-distributed-log", "label": "Kafka & the Distributed Log"},
+            {"slug": "rate-limiting", "label": "Rate Limiting"},
+            {"slug": "consistent-hashing", "label": "Consistent Hashing"},
+            {"slug": "data-partitioning-sharding", "label": "Data Partitioning & Sharding"},
+            {"slug": "replication-consensus", "label": "Replication & Consensus"},
+        ],
+    },
+    {
+        "id": "scalability-resilience",
+        "label": "Scalability & Resilience",
+        "color": "var(--cat-orange)",
+        "blurb": "Battle-tested techniques for keeping a system alive and fast under real failure and scale: breaking cascades, finding services, staying idempotent, and locking, searching and observing across all of it.",
+        "items": [
+            {"slug": "circuit-breakers-retries", "label": "Circuit Breakers & Retries"},
+            {"slug": "service-discovery", "label": "Service Discovery"},
+            {"slug": "idempotency-keys", "label": "Idempotency Keys"},
+            {"slug": "bloom-filters", "label": "Bloom Filters"},
+            {"slug": "distributed-locks", "label": "Distributed Locks"},
+            {"slug": "logs-metrics-tracing", "label": "Logs, Metrics & Distributed Tracing"},
+            {"slug": "object-blob-storage", "label": "Object / Blob Storage & Large Uploads"},
+            {"slug": "long-polling-websockets-sse", "label": "Long Polling, WebSockets & SSE"},
+            {"slug": "search-inverted-indexes", "label": "Search & Inverted Indexes"},
+        ],
+    },
+    {
+        "id": "database-design",
+        "label": "Database Design",
+        "color": "var(--cat-green)",
+        "blurb": "Choosing and shaping the storage layer: SQL vs NoSQL, indexing, transactions, schema design, and keeping data alive when a node fails.",
+        "items": [
+            {"slug": "sql-vs-nosql", "label": "SQL vs NoSQL"},
+            {"slug": "database-indexing", "label": "Database Indexing"},
+            {"slug": "acid-vs-base", "label": "ACID vs BASE"},
+            {"slug": "normalization-schema-design", "label": "Normalization & Schema Design"},
+            {"slug": "ecommerce-schema-worked-example", "label": "Worked Example: An E-Commerce Schema"},
+            {"slug": "db-replication-failover", "label": "Database Replication & Failover"},
+        ],
+    },
+    {
+        "id": "low-level-design",
+        "label": "Low-Level Design",
+        "color": "var(--cat-violet)",
+        "blurb": "Zooming in from boxes-and-arrows to classes and interfaces: SOLID, design patterns, UML, and two fully worked LLD examples.",
+        "items": [
+            {"slug": "solid-principles", "label": "SOLID Principles for System Design"},
+            {"slug": "design-patterns-in-system-design", "label": "Design Patterns in System Design"},
+            {"slug": "uml-class-diagrams", "label": "UML & Class Diagram Basics"},
+            {"slug": "lld-parking-lot", "label": "LLD Worked Example: Parking Lot System"},
+            {"slug": "lld-rate-limiter", "label": "LLD Worked Example: Rate Limiter"},
+        ],
+    },
+    {
+        "id": "case-studies",
+        "label": "Case Studies",
+        "color": "var(--cat-rose)",
+        "blurb": "Full system designs end to end — requirements, HLD, LLD and schema together — the way an interview or a real project actually unfolds.",
+        "folder_style": True,
+        "items": [
+            {"slug": "url-shortener", "label": "Design a URL Shortener", "star": True, "kind": "topic-urlshortener"},
+            {"slug": "chat-messaging-system", "label": "Design a Chat / Messaging System", "star": True},
+            {"slug": "news-feed-system", "label": "Design a News Feed System", "star": True},
+            {"slug": "distributed-rate-limiter", "label": "Design a Distributed Rate Limiter", "star": True},
+            {"slug": "ride-sharing-system", "label": "Design a Ride-Sharing System", "star": True},
+            {"slug": "payments-system", "label": "Design a Payments System", "star": True},
+            {"slug": "web-crawler", "label": "Design a Web Crawler"},
+            {"slug": "notification-system", "label": "Design a Notification System"},
+            {"slug": "unique-id-generator", "label": "Design a Unique ID Generator"},
+            {"slug": "distributed-key-value-store", "label": "Design a Distributed Key-Value Store"},
+            {"slug": "google-docs-collab-editing", "label": "Design Google Docs (Real-Time Collaborative Editing)"},
+            {"slug": "video-streaming-service", "label": "Design a Video Streaming Service"},
+            {"slug": "ticket-booking-system", "label": "Design a Ticket Booking System"},
+            {"slug": "dropbox-google-drive", "label": "Design Dropbox / Google Drive"},
+            {"slug": "search-autocomplete", "label": "Design Search Autocomplete"},
+            {"slug": "distributed-cache", "label": "Design a Distributed Cache"},
+            {"slug": "twitter-x", "label": "Design Twitter / X"},
+            {"slug": "instagram", "label": "Design Instagram"},
+            {"slug": "ecommerce-platform", "label": "Design an E-commerce Platform"},
+            {"slug": "flash-sale-system", "label": "Design a Flash Sale System"},
+            {"slug": "top-k-frequent-visitors", "label": "Find the Top K Most Frequent Visitors in a Billion-Row Log"},
+            {"slug": "search-engine", "label": "Design a Search Engine", "star": True},
+            {"slug": "ad-click-aggregation", "label": "Design an Ad Click Aggregation Pipeline", "star": True},
+            {"slug": "distributed-job-scheduler", "label": "Design a Distributed Job Scheduler", "star": True},
+            {"slug": "real-time-leaderboard", "label": "Design a Real-Time Leaderboard", "star": True},
+            {"slug": "proximity-service", "label": "Design a Proximity Service (Nearby Places)", "star": True},
+        ],
+    },
+    {
+        "id": "real-world-deep-dives",
+        "label": "Real-World Deep Dives",
+        "color": "var(--cat-amber)",
+        "blurb": "Narrow, mechanism-level dives into how production systems actually implement one specific tricky behavior.",
+        "items": [
+            {"slug": "ephemeral-content-stories", "label": "Ephemeral Content: How Stories Disappear After 24 Hours", "kind": "topic-module6", "dir": "ephemeral-content-stories"},
+            {"slug": "read-receipts-presence", "label": 'Read Receipts & "Online Now" at Scale', "kind": "topic-module6", "dir": "read-receipts-presence"},
+            {"slug": "push-notifications-fanout", "label": "Push Notifications: One Event, Millions of Phones", "kind": "topic-module6", "dir": "push-notifications-fanout"},
+            {"slug": "like-counting-at-scale", "label": "Counting a Billion Likes Without a Billion Row Locks", "kind": "topic-module6", "dir": "like-counting-at-scale"},
+            {"slug": "feature-flags-rollout", "label": "Feature Flags: Shipping to 1% Before 100%", "kind": "topic-module6", "dir": "feature-flags-rollout"},
+            {"slug": "cache-invalidation", "label": "Cache Invalidation: Purging Content From Everywhere at Once", "kind": "topic-module6", "dir": "cache-invalidation"},
+            {"slug": "fraud-detection-latency", "label": "Catching Fraud in the Time It Takes to Approve a Payment", "kind": "topic-module6", "dir": "fraud-detection-latency"},
+            {"slug": "zero-downtime-deploys", "label": "Deploying Without Dropping a Single Request", "kind": "topic-module6", "dir": "zero-downtime-deploys"},
+            {"slug": "distributed-tracing-microservices", "label": "Following One Request Across Twenty Microservices", "kind": "topic-module6", "dir": "distributed-tracing-microservices"},
+        ],
+    },
+    {
+        "id": "interview-playbook",
+        "label": "Interview Playbook",
+        "color": "var(--cat-slate)",
+        "blurb": "How to run the 45 minutes: the framework for gathering requirements, and the trade-off reasoning that separates a strong answer from a memorized one.",
+        "items": [
+            {"slug": "how-to-approach-a-system-design-interview", "label": "How to Approach a System Design Interview"},
+            {"slug": "common-tradeoffs-and-pitfalls", "label": "Common Trade-offs & Pitfalls"},
+        ],
+    },
+]
