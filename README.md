@@ -19,11 +19,11 @@ A URL shortener is small enough to hold in your head, but it still forces every 
 
 Work through 01 → 02 → 03 in order the first time — each one hands off a concrete decision to the next (HLD decides there's a cache and a replica; LLD decides that lives behind a `CacheClient` interface; DB design decides what a cache miss actually queries). After that, 04 gives you four more problems to run through the same three lenses on your own.
 
-Each of modules 01–03 ends with a diagram, published as its own page so you can open it full-size or share it:
+Each of modules 01–03 opens with its own diagram, drawn in Excalidraw and embedded directly in the page:
 
-- **HLD** — [architecture diagram](https://claude.ai/code/artifact/e3177f5c-0788-4be8-a830-f4de2a915547): write path, cached read path, async analytics.
-- **LLD** — [class + sequence diagram](https://claude.ai/code/artifact/0ba9efda-fc3f-4db8-892f-7dd702559937): the interfaces behind the service, and the exact call order for a redirect.
-- **DB design** — [schema / ER diagram](https://claude.ai/code/artifact/bc5f3561-f62e-43b0-8ce1-0e19cf1bed1a): three tables, two indexes, one denormalization.
+- **HLD** — architecture: write path, cached read path, async analytics.
+- **LLD** — class diagram and a `GET /{code}` sequence diagram: the interfaces behind the service, and the exact call order for a redirect.
+- **DB design** — schema / ER: three tables, two indexes, one denormalization.
 
 ## What you need going in
 

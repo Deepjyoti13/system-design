@@ -1,6 +1,6 @@
 # Module 01 — High-Level Design (HLD)
 
-**Diagram for this module:** [URL Shortener — architecture diagram](https://claude.ai/code/artifact/e3177f5c-0788-4be8-a830-f4de2a915547)
+![URL shortener architecture: the write path, the cached read path, and the fire-and-forget analytics path](diagrams/url-shortener-hld.svg)
 
 ## What HLD is actually for
 
@@ -35,7 +35,7 @@ These reappear in almost every HLD, not just this one:
 
 ## Step 3: the worked design
 
-Open the [architecture diagram](https://claude.ai/code/artifact/e3177f5c-0788-4be8-a830-f4de2a915547) alongside this. There are three separate flows through the same set of boxes:
+The architecture diagram at the top of this module shows three separate flows through the same set of boxes:
 
 **Write path — creating a short link**
 `Client → Load Balancer → App Server → Primary DB`

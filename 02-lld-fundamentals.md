@@ -1,6 +1,6 @@
 # Module 02 — Low-Level Design (LLD)
 
-**Diagram for this module:** [URL Shortener — class + sequence diagram](https://claude.ai/code/artifact/0ba9efda-fc3f-4db8-892f-7dd702559937)
+![URL shortener class diagram: one controller, one service, and three dependencies behind interfaces](diagrams/url-shortener-lld-class.svg)
 
 ## What LLD is actually for
 
@@ -12,7 +12,7 @@ This is the single most useful habit in LLD, and the worked example exists mainl
 
 ## The worked design
 
-Open the [class diagram](https://claude.ai/code/artifact/0ba9efda-fc3f-4db8-892f-7dd702559937) (figure 1). Five classes, three of which are interfaces:
+The class diagram at the top of this module has five classes, three of which are interfaces:
 
 - **`UrlShortenerController`** — the HTTP layer. Parses requests, applies the `RateLimiter`, calls the service, and turns the result into an HTTP response (a 201 with the short URL, or a 302 redirect, or a 404/429). It knows nothing about databases or caches.
 - **`UrlShortenerService`** — the business logic. Two methods: `create(longUrl)` and `resolve(code)`. It orchestrates the interfaces below it but implements none of the storage itself.
@@ -53,7 +53,9 @@ Two error cases worth designing for deliberately, not as an afterthought:
 
 ### The sequence: what actually happens on `GET /{code}`
 
-Figure 2 in the diagram walks this step by step. The important thing to notice: the controller and the service *don't know or care* whether the answer came from the cache or the database — that branch lives entirely inside `resolve()`. That's the interface boundary paying off again: you could delete the cache entirely, and only `resolve()`'s implementation would change.
+![Sequence diagram for GET /{code}: controller to service to cache, falling through to the repository only on a miss](diagrams/url-shortener-lld-sequence.svg)
+
+The sequence diagram above walks this step by step. The important thing to notice: the controller and the service *don't know or care* whether the answer came from the cache or the database — that branch lives entirely inside `resolve()`. That's the interface boundary paying off again: you could delete the cache entirely, and only `resolve()`'s implementation would change.
 
 ## Design patterns you just used, named
 

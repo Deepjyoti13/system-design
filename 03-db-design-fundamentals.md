@@ -1,6 +1,6 @@
 # Module 03 — Database Design
 
-**Diagram for this module:** [URL Shortener — schema / ER diagram](https://claude.ai/code/artifact/bc5f3561-f62e-43b0-8ce1-0e19cf1bed1a)
+![URL shortener schema: three tables, the unique index every redirect queries by, and the denormalized click_count](diagrams/url-shortener-schema.svg)
 
 ## What DB design is actually for
 
@@ -14,7 +14,7 @@ Three entities fall directly out of the requirements in module 01:
 - **`urls`** — the mapping the entire system exists to serve.
 - **`click_events`** — one row per redirect, for analytics.
 
-Open the [ER diagram](https://claude.ai/code/artifact/bc5f3561-f62e-43b0-8ce1-0e19cf1bed1a) for the full field list. A few decisions are worth walking through rather than just reading off the diagram:
+The schema diagram at the top of this module carries the full field list. A few decisions are worth walking through rather than just reading off the diagram:
 
 ### Why `short_code` gets a unique index, non-negotiably
 
