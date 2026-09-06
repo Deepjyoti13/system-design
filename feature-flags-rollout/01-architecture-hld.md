@@ -1,5 +1,7 @@
 # Module 01 — Architecture & High-Level Design
 
+**Diagram for this module:** ![Feature flag architecture: control plane vs. the in-process evaluation hot path](diagrams/01-architecture.svg)
+
 ## Requirements (stated, not guessed)
 
 **Functional:**
