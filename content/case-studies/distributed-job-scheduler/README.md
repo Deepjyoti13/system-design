@@ -48,6 +48,8 @@ Each job definition stores its own `next_run_time`. A scheduler component contin
 
 ## Low-Level Design
 
+![Split-brain: two schedulers both believe they hold the lease, but only one's conditional claim update actually affects a row](diagrams/lld.svg)
+
 **Claim-and-dispatch loop**, pseudocode (run only by the current shard leader):
 ```
 Scheduler.tick():
@@ -72,6 +74,8 @@ The `idempotency_key` combining `job_id` and the SPECIFIC scheduled time it fire
 **Missed-schedule catch-up**: if the scheduler itself was down when a job was due (not a worker failure — the scheduler process itself unavailable), the job's `next_run_time` is simply still in the past once a leader resumes scanning, and it's picked up and triggered on the next tick, no different from any other due job — the design doesn't need special catch-up logic because "overdue" is just a more extreme case of "due."
 
 ## Database Design & Scaling
+
+![Schema: job_definitions with its composite (shard, status, next_run_time) index, and job_runs sharded independently by job_id](diagrams/er.svg)
 
 - **Job definitions:** `(job_id, cron_expr/run_at, next_run_time, status, shard, retry_policy)` — indexed on `(shard, status, next_run_time)`, the composite index this system's core query actually needs (cross-ref [Database Indexing](../../database-design/database-indexing.md)'s leftmost-prefix reasoning: filter by shard first, then status, then range-scan the due timestamps).
 - **Job runs:** `(run_id, job_id, triggered_at, status, retry_count)` — sharded separately, by `job_id`, since run-history queries ("this job's recent runs") are scoped per job, not per shard.
