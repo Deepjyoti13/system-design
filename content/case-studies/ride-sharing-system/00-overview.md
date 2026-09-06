@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![A ride request, plain sight: the geohash grid around a rider, the 9-cell neighborhood actually searched, and why that beats scanning all 5 million drivers](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

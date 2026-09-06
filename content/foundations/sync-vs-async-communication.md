@@ -15,7 +15,7 @@ Put five services in a synchronous chain, each 99.9% available and 50 ms:
 - **Latency adds.** `5 × 50 ms = 250 ms` before any of your own work. Worse, tail latency dominates — if each service has a p99 of 400 ms, the chance that *at least one* of five calls hits its tail is roughly `1 − 0.99⁵ ≈ 5%`, so your p95 is now shaped by their p99s. This is the "tail at scale" problem, and it is why deep synchronous chains feel slow even when every individual service looks healthy on its own dashboard.
 - **Availability multiplies.** `0.999⁵ ≈ 0.995` — five nines-and-a-nine dependencies produce a service that is down roughly **2.5× more often** than any one of them. Every synchronous dependency is a shared fate: if the email service is down, checkout is down, even though nobody would say email is critical to taking money.
 
-Asynchronous handoff breaks both chains. The producer writes to a [queue or log](../hld-building-blocks/message-queues-pubsub.md) and returns; the consumer's latency and uptime stop being the caller's problem. The [URL shortener](../case-studies/url-shortener/README.md) queues click analytics for exactly this reason — a redirect must never wait on an analytics worker.
+Asynchronous handoff breaks both chains. The producer writes to a [queue or log](../hld-building-blocks/message-queues-pubsub.md) and returns; the consumer's latency and uptime stop being the caller's problem. The [URL shortener](../../01-hld-fundamentals.md) queues click analytics for exactly this reason — a redirect must never wait on an analytics worker.
 
 ## What "async" actually costs you
 

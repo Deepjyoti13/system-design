@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![A job, right on time: the scheduled-time-to-worker-pool flow, and the three possible outcomes when a job becomes due — only one of which is acceptable](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

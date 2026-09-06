@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![A message, plain sight: the online-push path vs. the offline-queue path, and why delivery status is a three-state machine, not a boolean](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

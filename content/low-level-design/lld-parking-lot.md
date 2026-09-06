@@ -2,7 +2,7 @@
 
 ![Parking Lot class diagram: spot-assignment and pricing as swappable strategies, and the row-lock that prevents two cars claiming one spot](diagrams/lld-parking-lot.svg)
 
-A parking lot is a classic LLD prompt precisely because it's small enough to finish in an interview, but it still forces the same decisions as a much bigger system: modeling a small type hierarchy, picking where a strategy belongs, and handling one real concurrency race. This guide's [Practice Problems](../case-studies/url-shortener/README.md) module already flags parking lot as a "smaller-scale, LLD-and-DB-heavy" problem for exactly this reason — this page works through it.
+A parking lot is a classic LLD prompt precisely because it's small enough to finish in an interview, but it still forces the same decisions as a much bigger system: modeling a small type hierarchy, picking where a strategy belongs, and handling one real concurrency race. This guide's [Practice Problems](../../04-practice-problems.md) module already flags parking lot as a "smaller-scale, LLD-and-DB-heavy" problem for exactly this reason — this page works through it.
 
 ## The entities
 

@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![Nearby, plain sight: a radius search fetches only the geohash cell you're standing in plus its 8 neighbors -- returned, filtered-out, and never-touched points, at a glance](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

@@ -26,7 +26,7 @@ Depend on abstractions, not concrete implementations. This is exactly the princi
 
 ## The honest caveat
 
-Applying all five to everything up front is its own anti-pattern — an interface with exactly one implementation that will only ever have one implementation is needless indirection, not good design. This guide's [URL Shortener practice section](../case-studies/url-shortener/README.md) already asks exactly this question for custom aliases and expiration: notice where an interface boundary is *earning* its place versus where it's decoration.
+Applying all five to everything up front is its own anti-pattern — an interface with exactly one implementation that will only ever have one implementation is needless indirection, not good design. This guide's [URL Shortener practice section](../../02-lld-fundamentals.md) already asks exactly this question for custom aliases and expiration: notice where an interface boundary is *earning* its place versus where it's decoration.
 
 ## Interviewer follow-ups
 

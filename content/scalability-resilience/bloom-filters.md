@@ -4,7 +4,7 @@
 
 ## What problem it solves
 
-A bloom filter answers "have I possibly seen this before?" for a huge set, using far less memory than storing the set itself — at the cost of allowing **false positives** (it can wrongly say "yes, probably" for something never inserted) but **never false negatives** (if it says "no," the item is definitely not in the set). That asymmetry is exactly what makes it useful as a cheap first check in front of something expensive: this guide's [URL Shortener](../case-studies/url-shortener/README.md) can check "does this short code already exist" against a bloom filter before ever touching the database — a "no" ends the check for free, and a "yes" just means "go check the database to be sure."
+A bloom filter answers "have I possibly seen this before?" for a huge set, using far less memory than storing the set itself — at the cost of allowing **false positives** (it can wrongly say "yes, probably" for something never inserted) but **never false negatives** (if it says "no," the item is definitely not in the set). That asymmetry is exactly what makes it useful as a cheap first check in front of something expensive: this guide's [URL Shortener](../../02-lld-fundamentals.md) can check "does this short code already exist" against a bloom filter before ever touching the database — a "no" ends the check for free, and a "yes" just means "go check the database to be sure."
 
 ## How it actually works
 

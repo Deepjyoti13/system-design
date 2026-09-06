@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![Same post, two different costs: a normal account's post fans out to every follower immediately, while a celebrity's post waits and is merged into a reader's feed only when they actually look](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**
@@ -22,7 +24,7 @@ Using this guide's [back-of-envelope method](../../foundations/back-of-envelope-
 
 - **Posts/day:** assume 10% of DAU posts once/day → 30M posts/day.
 - **Posts/sec, average:** 30M / 86,400 ≈ 350/sec. Posting itself is never the bottleneck here.
-- **Feed-reads/sec:** assume every DAU opens their feed 5x/day → 1.5B reads/day ≈ 17,000/sec average, **~50,000/sec at peak** (3x). Reads outnumber writes by roughly **50:1** — the number that decides almost everything below, the same way a 100:1 read:write ratio decided this guide's [URL Shortener](../url-shortener/README.md) HLD.
+- **Feed-reads/sec:** assume every DAU opens their feed 5x/day → 1.5B reads/day ≈ 17,000/sec average, **~50,000/sec at peak** (3x). Reads outnumber writes by roughly **50:1** — the number that decides almost everything below, the same way a 100:1 read:write ratio decided this guide's [URL Shortener](../../../01-hld-fundamentals.md) HLD.
 - **Storage/day:** ~2KB/post (text + metadata, images stored separately per [Object / Blob Storage](../../scalability-resilience/object-blob-storage.md)) × 30M ≈ 60GB/day of post metadata — small. The number that actually matters is the next one.
 - **The celebrity fan-out number:** one post from a 10M-follower account, fanned out to every follower's feed at write time, is **10M individual writes for one post**. Compare that to a normal user's post — 300 average followers — and the three-order-of-magnitude gap between "normal post" and "celebrity post" is the entire reason this design can't use one uniform strategy for both.
 

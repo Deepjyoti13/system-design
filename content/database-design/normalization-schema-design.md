@@ -14,7 +14,7 @@ Normalization means splitting data so each fact lives in exactly one place. The 
 
 ## Denormalization is a trade, not a mistake
 
-This guide's own [URL Shortener database design](../case-studies/url-shortener/README.md) denormalizes on purpose: instead of always computing a link's click count as `COUNT(*) FROM click_events`, it keeps a running `click_count` column directly on `urls`. That's a real trade, not a shortcut taken by accident — it buys a cheap read (no aggregation at request time) at the cost of write complexity: now two things can theoretically disagree, so something has to keep the copy in sync (a trigger, an async worker off a queue, or accepting a few seconds of staleness). Whether that trade is worth it depends on the read:write ratio for that specific column, not on which version is "more correct" in the abstract — the normalized version is more correct, and denormalized anyway because the numbers justify it.
+This guide's own [URL Shortener database design](../../03-db-design-fundamentals.md) denormalizes on purpose: instead of always computing a link's click count as `COUNT(*) FROM click_events`, it keeps a running `click_count` column directly on `urls`. That's a real trade, not a shortcut taken by accident — it buys a cheap read (no aggregation at request time) at the cost of write complexity: now two things can theoretically disagree, so something has to keep the copy in sync (a trigger, an async worker off a queue, or accepting a few seconds of staleness). Whether that trade is worth it depends on the read:write ratio for that specific column, not on which version is "more correct" in the abstract — the normalized version is more correct, and denormalized anyway because the numbers justify it.
 
 ## How to actually decide
 

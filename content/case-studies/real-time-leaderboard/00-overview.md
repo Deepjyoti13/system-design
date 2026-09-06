@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![A leaderboard, plain sight: Alex scores +80 and jumps from #4 to #1 — and what happens to that leaderboard if the score event is delivered twice by an at-least-once queue](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

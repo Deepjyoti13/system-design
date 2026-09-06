@@ -2,11 +2,11 @@
 
 ![The 45-minute shape: how much time each phase actually deserves, and what happens if requirements get skipped](diagrams/how-to-approach-a-system-design-interview.svg)
 
-Every module in this guide's [Case Studies](../case-studies/url-shortener/README.md) works through the same chain: requirement → architecture decision → interface → schema. This page is the meta-version — the actual time budget and behavior that chain has to fit into during a real 45-60 minute interview, where the thing being evaluated is as much *how* you get to the design as the design itself.
+Every module in this guide's [Case Studies](../../01-hld-fundamentals.md) works through the same chain: requirement → architecture decision → interface → schema. This page is the meta-version — the actual time budget and behavior that chain has to fit into during a real 45-60 minute interview, where the thing being evaluated is as much *how* you get to the design as the design itself.
 
 ## The shape of the 45 minutes
 
-Roughly: 5-10 minutes on requirements, 15-20 on high-level design, 10-15 on going deep on one or two components (the interviewer usually picks which), and 5-10 on wrap-up/trade-offs/scaling. The single most common failure mode isn't a wrong answer — it's spending 25 minutes on requirements and HLD and leaving no time to go deep on anything, or the reverse: jumping to boxes in the first 2 minutes and designing for guesses instead of constraints, which this guide's own [Practice Problems](../case-studies/url-shortener/README.md) module calls out directly.
+Roughly: 5-10 minutes on requirements, 15-20 on high-level design, 10-15 on going deep on one or two components (the interviewer usually picks which), and 5-10 on wrap-up/trade-offs/scaling. The single most common failure mode isn't a wrong answer — it's spending 25 minutes on requirements and HLD and leaving no time to go deep on anything, or the reverse: jumping to boxes in the first 2 minutes and designing for guesses instead of constraints, which this guide's own [Practice Problems](../../04-practice-problems.md) module calls out directly.
 
 ## Requirements: ask, don't assume
 
@@ -14,7 +14,7 @@ State functional requirements back to the interviewer in your own words before d
 
 ## High-level design: boxes justified by requirements, not habit
 
-Every box should trace back to a requirement already on the table. A cache, a queue, a second data store — each one should be a direct answer to a number or a constraint the interviewer gave you, not a default "systems have these" reflex. This is exactly the discipline this guide's [Rigor bar](../case-studies/url-shortener/README.md) names: if you can't say which requirement justifies a component, you're about to be asked why it's there, and "it's standard" is not going to hold up.
+Every box should trace back to a requirement already on the table. A cache, a queue, a second data store — each one should be a direct answer to a number or a constraint the interviewer gave you, not a default "systems have these" reflex. This is exactly the discipline this guide's [Rigor bar](../../01-hld-fundamentals.md) names: if you can't say which requirement justifies a component, you're about to be asked why it's there, and "it's standard" is not going to hold up.
 
 ## Going deep: let the interviewer steer, then commit
 

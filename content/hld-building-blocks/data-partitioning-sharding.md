@@ -6,7 +6,7 @@
 
 That's the first question, and it's worth asking before drawing anything, because reaching for sharding when a replica would have solved it is a common wrong turn. A single database node has a ceiling on both write throughput and total storage. [Replication](../database-design/db-replication-failover.md) doesn't touch either ceiling — every replica still holds the *full* dataset and could, in principle, absorb the same write load as the primary; replicas just aren't used for writes by convention. What replication actually multiplies is read capacity, because reads can be spread across nodes that each hold a complete copy.
 
-Sharding solves a different problem: split the data itself across N nodes so each one holds only 1/N of it. Now write throughput and storage both scale with node count, because each node is only ever responsible for its own slice. This guide's [URL Shortener](../case-studies/url-shortener/README.md) database design makes exactly this call — it reaches for read replicas, not sharding, because its bottleneck is redirect *reads*, not writes.
+Sharding solves a different problem: split the data itself across N nodes so each one holds only 1/N of it. Now write throughput and storage both scale with node count, because each node is only ever responsible for its own slice. This guide's [URL Shortener](../../03-db-design-fundamentals.md) database design makes exactly this call — it reaches for read replicas, not sharding, because its bottleneck is redirect *reads*, not writes.
 
 ## Partitioning strategies, and what breaks each one
 

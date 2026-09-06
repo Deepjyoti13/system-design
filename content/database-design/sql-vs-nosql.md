@@ -4,7 +4,7 @@
 
 ## It isn't really one choice
 
-"SQL vs NoSQL" is usually asked as a single decision, but it's actually bundling several: fixed schema vs. flexible schema, joins vs. denormalized/embedded data, and — per [the CAP theorem](../foundations/latency-throughput-cap.md) — often a CP-leaning default vs. an AP-leaning one. The real decision driver is the query pattern the system actually needs to be fast, not a stylistic preference. This guide's own [URL Shortener](../case-studies/url-shortener/README.md) database design makes exactly this argument: its core lookup (`short_code -> long_url`) is a plain key-value pattern that a document or key-value store would serve fine, and it still picks relational — because the *other* queries it needs (a user's list of links, analytics joins) are what actually justify the choice, not the redirect path.
+"SQL vs NoSQL" is usually asked as a single decision, but it's actually bundling several: fixed schema vs. flexible schema, joins vs. denormalized/embedded data, and — per [the CAP theorem](../foundations/latency-throughput-cap.md) — often a CP-leaning default vs. an AP-leaning one. The real decision driver is the query pattern the system actually needs to be fast, not a stylistic preference. This guide's own [URL Shortener](../../03-db-design-fundamentals.md) database design makes exactly this argument: its core lookup (`short_code -> long_url`) is a plain key-value pattern that a document or key-value store would serve fine, and it still picks relational — because the *other* queries it needs (a user's list of links, analytics joins) are what actually justify the choice, not the redirect path.
 
 ## What you give up moving to NoSQL
 

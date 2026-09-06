@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![A rate limit, plain sight: the bucket draining as requests are allowed, hitting zero and rejecting one with a 429, then refilling to allow again](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

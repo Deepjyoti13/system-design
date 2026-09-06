@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![A click, counted exactly once: the timeline shows an on-time click, a deduped retry, a late-but-still-counted click inside the watermark's grace period, and a too-late click routed to a correction record](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

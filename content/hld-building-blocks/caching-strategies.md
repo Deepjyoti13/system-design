@@ -15,7 +15,7 @@ Every caching pattern is really a decision about who talks to the database, and 
 
 - **LRU (least recently used)** — the default for most workloads, because most access patterns have temporal locality: what was just read is likely to be read again soon.
 - **LFU (least frequently used)** — wins specifically when a small number of items get disproportionate traffic and you want them to survive a burst of one-off reads that LRU would otherwise let evict them (a "top 100 posts" cache is the classic case).
-- **TTL-based** — used when data has a natural staleness budget regardless of how often it's accessed. The [URL Shortener](../case-studies/url-shortener/README.md)'s redirect cache in this guide is exactly this: entries get a 1-hour TTL not because of access frequency, but because that's the acceptable staleness window for a redirect target.
+- **TTL-based** — used when data has a natural staleness budget regardless of how often it's accessed. The [URL Shortener](../../01-hld-fundamentals.md)'s redirect cache in this guide is exactly this: entries get a 1-hour TTL not because of access frequency, but because that's the acceptable staleness window for a redirect target.
 
 ## Invalidation is the actually hard part
 

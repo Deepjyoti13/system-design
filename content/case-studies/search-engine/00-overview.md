@@ -1,5 +1,7 @@
 # Module 00 — Overview
 
+![A query, plain sight: one query fans out only to the shards owning its terms, and their locally-ranked results converge into one merged, ranked answer](diagrams/overview.svg)
+
 ## Requirements
 
 **Functional:**

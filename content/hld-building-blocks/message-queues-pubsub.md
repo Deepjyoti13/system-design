@@ -4,7 +4,7 @@
 
 ## What problem this actually solves
 
-A queue decouples a producer from a consumer **in time and in failure** — the producer doesn't need the consumer to be up, fast, or even to exist yet. That's the entire reason queues exist, not a vague "it's more scalable." The [URL Shortener](../case-studies/url-shortener/README.md) case study is the concrete version: click analytics is queued specifically so a slow or down analytics worker can never block the redirect. Remove the queue and the redirect's latency becomes hostage to the analytics worker's latency — the opposite of what the system is trying to guarantee.
+A queue decouples a producer from a consumer **in time and in failure** — the producer doesn't need the consumer to be up, fast, or even to exist yet. That's the entire reason queues exist, not a vague "it's more scalable." The [URL Shortener](../../01-hld-fundamentals.md) case study is the concrete version: click analytics is queued specifically so a slow or down analytics worker can never block the redirect. Remove the queue and the redirect's latency becomes hostage to the analytics worker's latency — the opposite of what the system is trying to guarantee.
 
 That single sentence hides a lot of machinery. Everything below is that machinery, because "just put a queue in front of it" is where a mid-level answer stops and a senior answer starts.
 
@@ -46,7 +46,7 @@ This is the fork in the road that decides your ordering guarantees, your maximum
 **Partitioned consumption.** The key space is split into P partitions; each partition is assigned to exactly one consumer in the group. Order is preserved **within a partition**, which by construction means within a key. The costs are real and are what interviewers probe:
 
 - **Parallelism is capped at P.** The (P+1)th consumer sits idle. You cannot scale past the partition count without repartitioning.
-- **A hot key is a hot partition.** One celebrity, one merchant, one tenant sends 40% of traffic and it all lands on one consumer. Adding consumers does nothing at all. The fix is a composite key (`user_id:bucket`) which spreads load and gives up strict per-key ordering — see [Kafka & the Distributed Log](kafka-distributed-log.md) and the [real-time leaderboard](../case-studies/real-time-leaderboard/README.md).
+- **A hot key is a hot partition.** One celebrity, one merchant, one tenant sends 40% of traffic and it all lands on one consumer. Adding consumers does nothing at all. The fix is a composite key (`user_id:bucket`) which spreads load and gives up strict per-key ordering — see [Kafka & the Distributed Log](kafka-distributed-log.md) and the [real-time leaderboard](../case-studies/real-time-leaderboard/00-overview.md).
 - **Rebalancing is a stop-the-world event** in most implementations. A consumer joining, leaving, or missing a heartbeat triggers reassignment, and a deploy that restarts ten consumers one at a time can trigger ten rebalances.
 
 Every broker gives you some version of this. Kafka calls them partitions. **SQS FIFO** calls it `MessageGroupId` — messages with the same group id are strictly ordered and delivered one at a time, and different group ids proceed in parallel, so the group id *is* your partition key. RabbitMQ has no native concept, so you either run a **consistent-hash exchange** that routes by key across N queues, or you shard by declaring `orders.0 … orders.N` yourself.
