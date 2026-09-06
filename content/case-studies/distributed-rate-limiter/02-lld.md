@@ -39,7 +39,7 @@ The one place a local decision *is* made without consulting the store: `localSta
 
 ## Design patterns you just used, named
 
-- **Strategy pattern** — `RateLimiter`'s `TokenBucketRateLimiter` and `SlidingWindowRateLimiter` implementations are interchangeable behind one interface, exactly as [the LLD page](../../low-level-design/lld-rate-limiter.md) and [Design Patterns in System Design](../../low-level-design/design-patterns-in-system-design.md) name it — swapping the algorithm never touches `RateLimiterService`.
+- **Strategy pattern** — `RateLimiter`'s `TokenBucketRateLimiter` and `SlidingWindowRateLimiter` implementations are interchangeable behind one interface, exactly as [the LLD page](../../low-level-design/lld-rate-limiter.md) and [Design Patterns in System Design](../../low-level-design/design-patterns-in-system-design/03-behavioral-patterns.md) name it — swapping the algorithm never touches `RateLimiterService`.
 - **Repository pattern** — `CounterStore` hides where and how counter state is actually persisted; `RateLimiterService` never issues a Redis command directly.
 - **Decorator (via the cache layer)** — `LocalCache` wraps access to `CounterStore` without changing its contract: a caller of `RateLimiterService.check()` can't tell, from the interface alone, whether a given call hit the cache or the store — only the latency differs.
 

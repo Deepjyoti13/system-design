@@ -19,6 +19,10 @@ Item kinds:
     04-interviewer-qna), at content/<cat>/<slug>/ like a folder-style
     "single" -- used for a starred case study once it's been split out
     of one 8-section README.md into separate tab files.
+  - "topic-tabs": a generic tabbed topic for any one-off multi-tab
+    shape that doesn't fit topic-casestudy or topic-module6. The item
+    itself declares `"tabs": [(fname, label), ...]` -- no new
+    build-script code needed. Files live at content/<cat>/<slug>/.
 
 `star` marks the 11 topics written to full interview depth. Ten of them
 use "topic-casestudy"; the url-shortener one predates this scheme and
@@ -103,7 +107,13 @@ CATEGORIES = [
         "blurb": "Zooming in from boxes-and-arrows to classes and interfaces: SOLID, design patterns, UML, and two fully worked LLD examples.",
         "items": [
             {"slug": "solid-principles", "label": "SOLID Principles for System Design"},
-            {"slug": "design-patterns-in-system-design", "label": "Design Patterns in System Design"},
+            {"slug": "design-patterns-in-system-design", "label": "Design Patterns in System Design", "star": True, "kind": "topic-tabs", "tabs": [
+                ("00-overview.md", "Overview"),
+                ("01-creational-patterns.md", "Creational Patterns"),
+                ("02-structural-patterns.md", "Structural Patterns"),
+                ("03-behavioral-patterns.md", "Behavioral Patterns"),
+                ("04-interviewer-qna.md", "Interviewer Q&A"),
+            ]},
             {"slug": "uml-class-diagrams", "label": "UML & Class Diagram Basics"},
             {"slug": "lld-parking-lot", "label": "LLD Worked Example: Parking Lot System"},
             {"slug": "lld-rate-limiter", "label": "LLD Worked Example: Rate Limiter"},

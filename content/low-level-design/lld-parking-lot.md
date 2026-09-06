@@ -15,7 +15,7 @@ A parking lot is a classic LLD prompt precisely because it's small enough to fin
 
 **Spot assignment** — "nearest available" vs. "compact-first to save large spots for large vehicles" are both valid policies behind one `SpotAssignmentStrategy` interface with one method, `assign(vehicle, level) -> Spot`. Picking a policy is a config choice, not a rewrite.
 
-**Pricing** — hourly flat rate, a per-vehicle-type rate table, or a progressive rate (more expensive per hour the longer you stay) are all a `PricingStrategy` interface with one method, `computeFee(ticket) -> Amount`. This is the exact shape [SOLID's Open/Closed section](solid-principles.md) and [the Strategy pattern](design-patterns-in-system-design.md) both describe: swapping the policy shouldn't touch the class that calls it.
+**Pricing** — hourly flat rate, a per-vehicle-type rate table, or a progressive rate (more expensive per hour the longer you stay) are all a `PricingStrategy` interface with one method, `computeFee(ticket) -> Amount`. This is the exact shape [SOLID's Open/Closed section](solid-principles.md) and [the Strategy pattern](design-patterns-in-system-design/03-behavioral-patterns.md) both describe: swapping the policy shouldn't touch the class that calls it.
 
 ## The concurrency race, and where it's actually enforced
 

@@ -197,6 +197,29 @@ for cat in CATEGORIES:
                 }
                 written_items.append({"kind": "topic", "topicId": page_id, "label": label, "star": item.get("star", False)})
 
+        elif kind == "topic-tabs":
+            # Generic tabbed topic: item["tabs"] is a list of (fname, tab_label)
+            # pairs the taxonomy entry itself declares -- no new build-script
+            # code needed per one-off multi-tab topic, unlike topic-casestudy
+            # (fixed 5-tab shape) or topic-module6 (fixed 6-tab shape).
+            topic_dir = ROOT / "content" / cat_id / slug
+            tabs = []
+            any_written = False
+            for fname, tab_label in item["tabs"]:
+                tpid = f"{page_id}--{fname.split('.')[0]}"
+                if add_single_page(tpid, topic_dir / fname):
+                    any_written = True
+                tabs.append({"pageId": tpid, "label": tab_label})
+                page_owner[tpid] = {"kind": "topic", "topicId": page_id}
+            if any_written:
+                nav_topics[page_id] = {
+                    "label": label,
+                    "lede": item.get("lede", ""),
+                    "sectionLabel": cat["label"],
+                    "tabs": tabs,
+                }
+                written_items.append({"kind": "topic", "topicId": page_id, "label": label, "star": item.get("star", False)})
+
         elif kind == "topic-module6":
             topic_dir = ROOT / item["dir"]
             tabs = []
