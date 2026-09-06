@@ -7,7 +7,7 @@ This guide's [Rate Limiting](../hld-building-blocks/rate-limiting.md) page cover
 ## The interfaces
 
 - **`RateLimiter`** *(interface)* — one method, `allow(key) -> boolean`. `key` is whatever the limit is scoped to (a user ID, an API key, an IP) — the interface doesn't care which.
-- **`TokenBucketRateLimiter`**, **`SlidingWindowRateLimiter`** — concrete implementations of the algorithms this guide's HLD page already names. The caller depends only on `RateLimiter`, so swapping the algorithm — exactly the [Strategy pattern](design-patterns-in-system-design/03-behavioral-patterns.md) — never touches the caller.
+- **`TokenBucketRateLimiter`**, **`SlidingWindowRateLimiter`** — concrete implementations of the algorithms this guide's HLD page already names. The caller depends only on `RateLimiter`, so swapping the algorithm — exactly the [Strategy pattern](design-patterns-in-system-design/10-strategy.md) — never touches the caller.
 - **`CounterStore`** *(interface)* — `increment(key, windowStart) -> count`, `get(key) -> tokenState`. This is the seam that matters: an in-process implementation works for a single instance; a Redis-backed implementation is what makes the limiter correct across a fleet of app servers, and the [Rate Limiting](../hld-building-blocks/rate-limiting.md) page's whole "distributed rate limiter problem" section is really about which `CounterStore` implementation you're allowed to use.
 
 ## Pseudocode for token bucket, the usual default
