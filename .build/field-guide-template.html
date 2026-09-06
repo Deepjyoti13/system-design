@@ -145,7 +145,19 @@
     letter-spacing: 0.09em;
     color: var(--text-muted);
     text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
   }
+  .nav-section-head::-webkit-details-marker { display: none; }
+  .nav-section-head .chev {
+    display: inline-block;
+    flex: none;
+    font-size: 10px;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+  }
+  .nav-section[open] > .nav-section-head .chev { transform: rotate(90deg); }
   .nav-section-head .dot { width: 7px; height: 7px; border-radius: 2px; flex: none; }
   .nav-section-head .count { margin-left: auto; opacity: 0.7; font-weight: 400; }
 
@@ -165,6 +177,8 @@
     font-family: inherit;
   }
   .nav-item .num { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--cat-amber); flex: none; padding-top: 1px; }
+  .nav-item .bullet { font-size: 8px; color: var(--text-muted); flex: none; opacity: 0.55; padding-top: 4px; }
+  .nav-item.active .bullet { color: var(--accent); opacity: 0.8; }
   .nav-item:hover { background: var(--surface-2); }
   .nav-item.active { background: var(--accent-soft); color: var(--accent); }
   .nav-item.active .num { color: var(--accent); }
@@ -446,13 +460,15 @@ let currentTabId = null;
 function buildNav() {
   const nav = document.getElementById('nav');
   nav.innerHTML = '';
-  NAV.sections.forEach(section => {
-    const sec = document.createElement('div');
+  NAV.sections.forEach((section, i) => {
+    const sec = document.createElement('details');
     sec.className = 'nav-section';
     sec.dataset.section = section.id;
-    const head = document.createElement('div');
+    sec.name = 'nav-accordion';
+    if (i === 0) sec.open = true;
+    const head = document.createElement('summary');
     head.className = 'nav-section-head';
-    head.innerHTML = `<span class="dot" style="background:${section.color}"></span>${section.label}<span class="count">${section.items.length}</span>`;
+    head.innerHTML = `<span class="chev">▸</span><span class="dot" style="background:${section.color}"></span>${section.label}<span class="count">${section.items.length}</span>`;
     sec.appendChild(head);
     section.items.forEach(item => {
       const btn = document.createElement('button');
@@ -460,7 +476,7 @@ function buildNav() {
       if (item.kind === 'topic') btn.dataset.topicId = item.topicId;
       else btn.dataset.pageId = item.pageId;
       btn.dataset.search = item.label.toLowerCase();
-      const marker = item.star ? '<span class="num" title="Full interview depth">★</span>' : '';
+      const marker = item.star ? '<span class="num" title="Full interview depth">★</span>' : '<span class="bullet">●</span>';
       btn.innerHTML = `${marker}<span>${item.label}</span>`;
       btn.addEventListener('click', () => {
         if (item.kind === 'topic') openTopic(item.topicId);
@@ -472,11 +488,20 @@ function buildNav() {
   });
 }
 
+function syncAccordion() {
+  const activeItem = document.querySelector('.nav-item.active');
+  const sections = document.querySelectorAll('.nav-section');
+  sections.forEach((sec, i) => {
+    sec.open = activeItem ? sec.contains(activeItem) : i === 0;
+  });
+}
+
 function setActive(topicId, pageId) {
   document.querySelectorAll('.nav-item').forEach(el => {
     const isActive = topicId ? el.dataset.topicId === topicId : (!!pageId && el.dataset.pageId === pageId);
     el.classList.toggle('active', isActive);
   });
+  syncAccordion();
 }
 
 function openSingle(pageId, sectionLabel, itemLabel) {
@@ -570,7 +595,9 @@ document.getElementById('search').addEventListener('input', (e) => {
       if (match) any = true;
     });
     sec.classList.toggle('hidden', !any);
+    if (q) sec.open = any;   // reveal matches across every category while searching
   });
+  if (!q) syncAccordion();   // restore single-open accordion once the search is cleared
 });
 
 function boot() {

@@ -69,6 +69,20 @@ CATEGORIES = [
         ],
     },
     {
+        "id": "database-design",
+        "label": "Database Design",
+        "color": "var(--cat-green)",
+        "blurb": "Choosing and shaping the storage layer: SQL vs NoSQL, indexing, transactions, schema design, and keeping data alive when a node fails.",
+        "items": [
+            {"slug": "sql-vs-nosql", "label": "SQL vs NoSQL"},
+            {"slug": "database-indexing", "label": "Database Indexing"},
+            {"slug": "acid-vs-base", "label": "ACID vs BASE"},
+            {"slug": "normalization-schema-design", "label": "Normalization & Schema Design"},
+            {"slug": "ecommerce-schema-worked-example", "label": "Worked Example: An E-Commerce Schema"},
+            {"slug": "db-replication-failover", "label": "Database Replication & Failover"},
+        ],
+    },
+    {
         "id": "scalability-resilience",
         "label": "Scalability & Resilience",
         "color": "var(--cat-orange)",
@@ -84,20 +98,6 @@ CATEGORIES = [
             {"slug": "long-polling-websockets-sse", "label": "Long Polling, WebSockets & SSE"},
             {"slug": "search-inverted-indexes", "label": "Search & Inverted Indexes"},
             {"slug": "backpressure-load-shedding", "label": "Backpressure, Load Shedding & Bulkheads"},
-        ],
-    },
-    {
-        "id": "database-design",
-        "label": "Database Design",
-        "color": "var(--cat-green)",
-        "blurb": "Choosing and shaping the storage layer: SQL vs NoSQL, indexing, transactions, schema design, and keeping data alive when a node fails.",
-        "items": [
-            {"slug": "sql-vs-nosql", "label": "SQL vs NoSQL"},
-            {"slug": "database-indexing", "label": "Database Indexing"},
-            {"slug": "acid-vs-base", "label": "ACID vs BASE"},
-            {"slug": "normalization-schema-design", "label": "Normalization & Schema Design"},
-            {"slug": "ecommerce-schema-worked-example", "label": "Worked Example: An E-Commerce Schema"},
-            {"slug": "db-replication-failover", "label": "Database Replication & Failover"},
         ],
     },
     {
