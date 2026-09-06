@@ -8,21 +8,21 @@ HLD said "there's a database." LLD said "there's a `UrlRepository` interface." N
 
 ## From entities to schema
 
-Three entities fall directly out of the requirements in module 01:
+Three entities fall directly out of the requirements in Module 00:
 
 - **`users`** — who owns a link (optional; anonymous shortening is allowed).
 - **`urls`** — the mapping the entire system exists to serve.
 - **`click_events`** — one row per redirect, for analytics.
 
-The schema diagram at the top of this module carries the full field list. A few decisions are worth walking through rather than just reading off the diagram:
+The schema diagram above carries the full field list. A few decisions are worth walking through rather than just reading off the diagram:
 
 ### Why `short_code` gets a unique index, non-negotiably
 
-Every single redirect — the highest-traffic query in the whole system — is `SELECT long_url FROM urls WHERE short_code = ?`. Without an index, that's a full table scan against a table with, per the module 01 math, on the order of hundreds of billions of rows over a few years. The unique index isn't just an optimization here; it's also what makes the collision check in module 02 ("does this code already exist?") an O(log n) lookup instead of a correctness bug waiting to happen.
+Every single redirect — the highest-traffic query in the whole system — is `SELECT long_url FROM urls WHERE short_code = ?`. Without an index, that's a full table scan against a table with, per the Module 00 math, on the order of hundreds of billions of rows over a few years. The unique index isn't just an optimization here; it's also what makes the collision check in Module 02 ("does this code already exist?") an O(log n) lookup instead of a correctness bug waiting to happen.
 
 ### Why `click_count` is denormalized
 
-The "correct," fully-normalized way to answer "how many times has this link been clicked?" is `SELECT COUNT(*) FROM click_events WHERE url_id = ?`. That query is fine at low volume and gets slower as `click_events` grows — exactly the table growing fastest in the whole system, since it gets a row on every redirect. The fix is to keep a running `click_count` column directly on `urls`, updated asynchronously (by the analytics worker from module 01, off the critical path) rather than computed live. This is a genuine trade-off: you gain a cheap read, and you accept that `click_count` can lag the true count by however long the async update takes. Naming that lag explicitly — rather than letting it be an unstated surprise — is the actual skill here.
+The "correct," fully-normalized way to answer "how many times has this link been clicked?" is `SELECT COUNT(*) FROM click_events WHERE url_id = ?`. That query is fine at low volume and gets slower as `click_events` grows — exactly the table growing fastest in the whole system, since it gets a row on every redirect. The fix is to keep a running `click_count` column directly on `urls`, updated asynchronously (by the analytics worker from Module 01, off the critical path) rather than computed live. This is a genuine trade-off: you gain a cheap read, and you accept that `click_count` can lag the true count by however long the async update takes. Naming that lag explicitly — rather than letting it be an unstated surprise — is the actual skill here.
 
 ### Why `owner_id` is nullable, and indexed anyway
 
@@ -31,6 +31,19 @@ Anonymous link creation is a functional requirement, so `owner_id` has to allow 
 ### Why `click_events` gets a composite index on `(url_id, occurred_at)`
 
 Analytics queries are almost never "all clicks ever" — they're "clicks on this link in this date range." A composite index with `url_id` first lets the database narrow to one link's rows before it even considers the timestamp, which is what makes date-range queries on a specific link fast without needing a separate index per column.
+
+## Indexes
+
+- `urls(short_code)` — **unique**, the mechanism above; every redirect and every write-time collision check uses it.
+- `urls(owner_id)` — serves "list my links"; nullable column, indexed anyway (above).
+- `click_events(url_id, occurred_at)` — **composite**, serves date-range analytics for a specific link (above).
+- No index needed on `click_events.occurred_at` alone — every real query in this system is scoped to one link first, so a standalone timestamp index would serve no actual access pattern.
+
+## Consistency
+
+- **`urls`:** strongly consistent for the mapping itself — a redirect must never resolve to the wrong URL, or fail to resolve a URL that was just successfully created. This is a hard requirement, not a tunable one.
+- **`urls.click_count`:** eventually consistent by design (above) — it's allowed to lag the true count by the analytics worker's processing delay, an explicit, named trade, not an accident.
+- **`click_events`:** append-only and eventually reflected in `click_count`; the individual rows themselves are written once and never updated, so there's no update-consistency question for this table at all.
 
 ## SQL vs. NoSQL, for this system specifically
 
@@ -44,8 +57,8 @@ This design uses a relational database, and it's worth being explicit about why,
 
 - **Sharding `urls`:** once a single primary can't hold write throughput or the whole table no longer fits comfortably in memory/cache, shard by a hash of `short_code`. Because every read is already a point lookup by `short_code`, the application always knows which shard to query — no cross-shard fan-out needed for the hot path.
 - **Splitting `click_events` out entirely:** this table has the highest write volume and the least need for strong consistency or joins. At real scale it's a strong candidate to move off the primary relational cluster entirely, into a time-series or columnar store (ClickHouse, a managed time-series database) built for exactly this write pattern — leaving `urls` and `users` on a smaller, easier-to-manage relational cluster.
-- **Read replicas vs. sharding:** module 01's read replicas solve *read throughput*. Sharding solves *write throughput and total data size*. It's easy to reach for sharding when a replica would actually solve the problem — worth asking "is this a read problem or a write/size problem?" before picking either.
+- **Read replicas vs. sharding, again:** Module 01's read replicas solve *read throughput*. Sharding solves *write throughput and total data size*. It's easy to reach for sharding when a replica would actually solve the problem — worth asking "is this a read problem or a write/size problem?" before picking either.
 
 ## Connecting it back
 
-Look at all three diagrams side by side now: the cache in the HLD diagram exists because of the read/write ratio in module 01's requirements; the `CacheClient` interface in the LLD diagram exists so that cache could later be swapped or removed without touching the service; and the unique index in this module is what makes both of those decisions actually work under load instead of just working on paper. That chain — requirement → architecture decision → interface → schema — is the thing to practice reproducing on a new problem, which is exactly what module 04 asks you to do.
+Look at all three diagrams side by side now: the cache in the HLD diagram exists because of the read/write ratio in Module 00's requirements; the `CacheClient` interface in the LLD diagram exists so that cache could later be swapped or removed without touching the service; and the unique index in this module is what makes both of those decisions actually work under load instead of just working on paper. That chain — requirement → architecture decision → interface → schema — is the thing to practice reproducing on a new problem, which is exactly what Module 04 asks you to do.

@@ -120,6 +120,7 @@ MODULE6_TABS = [
 ]
 
 URLSHORTENER_TABS = [
+    ("00-overview.md", "Overview"),
     ("01-hld-fundamentals.md", "High-Level Design (HLD)"),
     ("02-lld-fundamentals.md", "Low-Level Design (LLD)"),
     ("03-db-design-fundamentals.md", "Database Design"),
