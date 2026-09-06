@@ -1,0 +1,15 @@
+# Module 01 — Architecture & High-Level Design
+
+![A geohash turns a 2D radius search into a small set of prefix lookups, split across a churn-optimized dynamic store and a durable static store](diagrams/hld.svg)
+
+**Two stores, split by churn rate, not by entity type.** A driver's location and a restaurant's location are the same KIND of data (a geohash-indexed point), but they have wildly different write patterns, so they live in different systems:
+- **Dynamic location store** (an in-memory geo-indexed structure, e.g. Redis `GEOADD`/`GEOSEARCH`) for frequently-moving entities — optimized for extremely high write throughput, with no durability requirement, since a stale or lost entry is corrected by the next location ping seconds later.
+- **Static POI store** (a relational table with a geohash-prefix index, cross-ref [Database Indexing](../../database-design/database-indexing.md)) for rarely-changing points — optimized for durability and heavy read volume, not write throughput.
+
+**Geo-sharding** — both stores are partitioned by geohash prefix (cross-ref [Data Partitioning & Sharding](../../hld-building-blocks/data-partitioning-sharding.md), [Consistent Hashing](../../hld-building-blocks/consistent-hashing.md)): the same spatial-locality property that makes geohashes useful for querying also makes them a natural shard key — a "nearby" query for a point in one city resolves against one or two shards, never the whole planet's worth of data.
+
+**Caching the static store's hot regions** — city-center POI density means a small fraction of geohash cells serve a disproportionate share of queries; a cache-aside layer (cross-ref [Caching Strategies](../../hld-building-blocks/caching-strategies.md)) in front of the static store absorbs this skew, since restaurant listings changing once a day tolerate a cache far more comfortably than a driver's position would.
+
+**Load Handling.** The dominant load risk is regional write bursts — a city's evening rush hour driving up ping volume in exactly the shards covering that city, while other regions' shards are unaffected because of geo-sharding. A second, cheaper lever: a location ping that hasn't moved meaningfully (within a few meters of the last recorded position) is dropped before it reaches the store at all — most write amplification in a system like this comes from stationary or slow-moving entities re-reporting a position that hasn't changed.
+
+**Concurrent-User Handling.** This system deliberately has almost no "race" in the strict sense other case studies need to close. A rider's nearby-query reading a driver's position that's a few hundred milliseconds stale — updated by a concurrent location ping that landed a moment later — is an accepted trade, not a bug (cross-ref [Consistency Models](../../hld-building-blocks/consistency-models.md)): unlike a payment or a job claim, there's no correctness requirement that a nearby-search see the ABSOLUTE latest position, only a recent one. This is why the dynamic store can skip transactions, locks, or idempotency keys entirely — the cost of a stale read here is invisible to the user, not a lost or duplicated write.

@@ -126,6 +126,19 @@ URLSHORTENER_TABS = [
     ("04-practice-problems.md", "Practice Problems"),
 ]
 
+# The tabbed shape for a starred case study written to full interview depth:
+# same 5-module split as topic-module6, minus its separate README/"Module
+# Guide" tab (a case study's README *is* the split content, not a companion
+# guide) and with diagrams embedded inline via markdown image syntax rather
+# than the legacy PNG-append mechanism.
+CASESTUDY_TABS = [
+    ("00-overview.md", "Overview"),
+    ("01-architecture-hld.md", "Architecture & HLD"),
+    ("02-lld.md", "LLD"),
+    ("03-db-design.md", "DB Design"),
+    ("04-interviewer-qna.md", "Interviewer Q&A"),
+]
+
 for cat in CATEGORIES:
     cat_id = cat["id"]
     folder_style = cat.get("folder_style", False)
@@ -159,6 +172,25 @@ for cat in CATEGORIES:
                 nav_topics[page_id] = {
                     "label": label,
                     "lede": "The one running example carried through HLD, LLD, and a schema, three times over.",
+                    "sectionLabel": cat["label"],
+                    "tabs": tabs,
+                }
+                written_items.append({"kind": "topic", "topicId": page_id, "label": label, "star": item.get("star", False)})
+
+        elif kind == "topic-casestudy":
+            case_dir = ROOT / "content" / cat_id / slug
+            tabs = []
+            any_written = False
+            for fname, tab_label in CASESTUDY_TABS:
+                tpid = f"{page_id}--{fname.split('.')[0]}"
+                if add_single_page(tpid, case_dir / fname):
+                    any_written = True
+                tabs.append({"pageId": tpid, "label": tab_label})
+                page_owner[tpid] = {"kind": "topic", "topicId": page_id}
+            if any_written:
+                nav_topics[page_id] = {
+                    "label": label,
+                    "lede": item.get("lede", ""),
                     "sectionLabel": cat["label"],
                     "tabs": tabs,
                 }

@@ -14,10 +14,15 @@ Item kinds:
   - "topic-module6": the Real-World Deep Dives shape (6 tabs:
     00-overview / 01-architecture-hld / 02-lld / 03-db-design /
     04-interviewer-qna / README), at a root-level folder named `dir`.
+  - "topic-casestudy": the Case Studies tabbed shape (5 tabs:
+    00-overview / 01-architecture-hld / 02-lld / 03-db-design /
+    04-interviewer-qna), at content/<cat>/<slug>/ like a folder-style
+    "single" -- used for a starred case study once it's been split out
+    of one 8-section README.md into separate tab files.
 
-`star` marks the 11 topics written to full interview depth (8 sections
-for "single" ones; the url-shortener one predates this scheme and keeps
-its own 4-tab shape).
+`star` marks the 11 topics written to full interview depth. Ten of them
+use "topic-casestudy"; the url-shortener one predates this scheme and
+keeps its own bespoke 4-tab shape via "topic-urlshortener".
 """
 
 CATEGORIES = [
@@ -112,11 +117,11 @@ CATEGORIES = [
         "folder_style": True,
         "items": [
             {"slug": "url-shortener", "label": "Design a URL Shortener", "star": True, "kind": "topic-urlshortener"},
-            {"slug": "chat-messaging-system", "label": "Design a Chat / Messaging System", "star": True},
-            {"slug": "news-feed-system", "label": "Design a News Feed System", "star": True},
-            {"slug": "distributed-rate-limiter", "label": "Design a Distributed Rate Limiter", "star": True},
-            {"slug": "ride-sharing-system", "label": "Design a Ride-Sharing System", "star": True},
-            {"slug": "payments-system", "label": "Design a Payments System", "star": True},
+            {"slug": "chat-messaging-system", "label": "Design a Chat / Messaging System", "star": True, "kind": "topic-casestudy"},
+            {"slug": "news-feed-system", "label": "Design a News Feed System", "star": True, "kind": "topic-casestudy"},
+            {"slug": "distributed-rate-limiter", "label": "Design a Distributed Rate Limiter", "star": True, "kind": "topic-casestudy"},
+            {"slug": "ride-sharing-system", "label": "Design a Ride-Sharing System", "star": True, "kind": "topic-casestudy"},
+            {"slug": "payments-system", "label": "Design a Payments System", "star": True, "kind": "topic-casestudy"},
             {"slug": "web-crawler", "label": "Design a Web Crawler"},
             {"slug": "notification-system", "label": "Design a Notification System"},
             {"slug": "unique-id-generator", "label": "Design a Unique ID Generator"},
@@ -132,11 +137,11 @@ CATEGORIES = [
             {"slug": "ecommerce-platform", "label": "Design an E-commerce Platform"},
             {"slug": "flash-sale-system", "label": "Design a Flash Sale System"},
             {"slug": "top-k-frequent-visitors", "label": "Find the Top K Most Frequent Visitors in a Billion-Row Log"},
-            {"slug": "search-engine", "label": "Design a Search Engine", "star": True},
-            {"slug": "ad-click-aggregation", "label": "Design an Ad Click Aggregation Pipeline", "star": True},
-            {"slug": "distributed-job-scheduler", "label": "Design a Distributed Job Scheduler", "star": True},
-            {"slug": "real-time-leaderboard", "label": "Design a Real-Time Leaderboard", "star": True},
-            {"slug": "proximity-service", "label": "Design a Proximity Service (Nearby Places)", "star": True},
+            {"slug": "search-engine", "label": "Design a Search Engine", "star": True, "kind": "topic-casestudy"},
+            {"slug": "ad-click-aggregation", "label": "Design an Ad Click Aggregation Pipeline", "star": True, "kind": "topic-casestudy"},
+            {"slug": "distributed-job-scheduler", "label": "Design a Distributed Job Scheduler", "star": True, "kind": "topic-casestudy"},
+            {"slug": "real-time-leaderboard", "label": "Design a Real-Time Leaderboard", "star": True, "kind": "topic-casestudy"},
+            {"slug": "proximity-service", "label": "Design a Proximity Service (Nearby Places)", "star": True, "kind": "topic-casestudy"},
         ],
     },
     {

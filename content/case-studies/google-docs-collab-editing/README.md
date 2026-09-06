@@ -10,7 +10,7 @@
 
 ## Why this isn't just this guide's chat system again
 
-This guide's [Chat / Messaging System](../chat-messaging-system/README.md) case study looks similar on the surface — many clients, one server, near-real-time delivery — but chat messages are independent events that never conflict with each other; message #4812 doesn't care what message #4811 said. Two people editing the *same paragraph* of the *same document* at the *same instant* produce edits that directly collide at the character level: one person deletes the word another person is simultaneously typing into. Ordering the edits (which is all a chat system has to do) isn't enough — this needs an actual conflict-resolution algorithm.
+This guide's [Chat / Messaging System](../chat-messaging-system/00-overview.md) case study looks similar on the surface — many clients, one server, near-real-time delivery — but chat messages are independent events that never conflict with each other; message #4812 doesn't care what message #4811 said. Two people editing the *same paragraph* of the *same document* at the *same instant* produce edits that directly collide at the character level: one person deletes the word another person is simultaneously typing into. Ordering the edits (which is all a chat system has to do) isn't enough — this needs an actual conflict-resolution algorithm.
 
 ## The core mechanism: Operational Transformation (or CRDTs)
 

@@ -8,7 +8,7 @@ Post a short text update (a "tweet"), follow other accounts, see a timeline of t
 
 ## The core problem is already solved elsewhere in this guide
 
-The core feed-generation problem here — fan-out-on-write vs. fan-out-on-read, and the celebrity-account problem that decides between them — is the exact same problem this guide's [News Feed System](../news-feed-system/README.md) case study already covers in depth: the threshold-based hybrid, the `FanoutStrategy` LLD, the `posts`-by-author-id / `feed_items`-by-user-id sharding split. Read that first. This page covers only what's specifically different about Twitter/X's shape of the same problem.
+The core feed-generation problem here — fan-out-on-write vs. fan-out-on-read, and the celebrity-account problem that decides between them — is the exact same problem this guide's [News Feed System](../news-feed-system/00-overview.md) case study already covers in depth: the threshold-based hybrid, the `FanoutStrategy` LLD, the `posts`-by-author-id / `feed_items`-by-user-id sharding split. Read that first. This page covers only what's specifically different about Twitter/X's shape of the same problem.
 
 ## What's actually different here
 
