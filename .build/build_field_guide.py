@@ -95,6 +95,11 @@ def add_single_page(page_id, md_path):
 
 
 def add_legacy_diagram(page_id, png_path):
+    svg_path = png_path.with_suffix(".svg")
+    if svg_path.exists():
+        b64 = base64.b64encode(svg_path.read_bytes()).decode("ascii")
+        PAGE_DIAGRAMS.setdefault(page_id, []).append(f"data:image/svg+xml;base64,{b64}")
+        return
     if not png_path.exists():
         return
     b64 = base64.b64encode(png_path.read_bytes()).decode("ascii")
