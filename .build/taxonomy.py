@@ -167,6 +167,10 @@ CATEGORIES = [
             {"slug": "proximity-service", "label": "Design a Proximity Service (Nearby Places)", "star": True, "kind": "topic-casestudy"},
             {"slug": "metrics-monitoring-observability", "label": "Design a Metrics & Monitoring System (Observability Platform)", "star": True, "kind": "topic-casestudy"},
             {"slug": "ad-server-targeting", "label": "Design an Ad Server (Targeting & Frequency Capping)", "star": True, "kind": "topic-casestudy"},
+            {"slug": "webhook-delivery-system", "label": "Design a Webhook Delivery System", "star": True, "kind": "topic-casestudy"},
+            {"slug": "distributed-coordination-service", "label": "Design a Distributed Lock / Coordination Service (Chubby/ZooKeeper)", "star": True, "kind": "topic-casestudy"},
+            {"slug": "multiplayer-game-matchmaking", "label": "Design a Multiplayer Game Backend & Matchmaking (Online Chess)", "star": True, "kind": "topic-casestudy"},
+            {"slug": "ab-testing-platform", "label": "Design an A/B Testing / Experimentation Platform", "star": True, "kind": "topic-casestudy"},
         ],
     },
     {
