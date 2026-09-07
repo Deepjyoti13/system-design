@@ -129,6 +129,7 @@ CATEGORIES = [
             {"slug": "uml-class-diagrams", "label": "UML & Class Diagram Basics"},
             {"slug": "lld-parking-lot", "label": "LLD Worked Example: Parking Lot System"},
             {"slug": "lld-rate-limiter", "label": "LLD Worked Example: Rate Limiter"},
+            {"slug": "lld-splitwise", "label": "LLD Worked Example: Splitwise (Expense Splitting)"},
         ],
     },
     {
@@ -164,6 +165,8 @@ CATEGORIES = [
             {"slug": "distributed-job-scheduler", "label": "Design a Distributed Job Scheduler", "star": True, "kind": "topic-casestudy"},
             {"slug": "real-time-leaderboard", "label": "Design a Real-Time Leaderboard", "star": True, "kind": "topic-casestudy"},
             {"slug": "proximity-service", "label": "Design a Proximity Service (Nearby Places)", "star": True, "kind": "topic-casestudy"},
+            {"slug": "metrics-monitoring-observability", "label": "Design a Metrics & Monitoring System (Observability Platform)", "star": True, "kind": "topic-casestudy"},
+            {"slug": "ad-server-targeting", "label": "Design an Ad Server (Targeting & Frequency Capping)", "star": True, "kind": "topic-casestudy"},
         ],
     },
     {
