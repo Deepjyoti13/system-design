@@ -1,0 +1,31 @@
+# Module 04 — Interviewer Q&A
+
+**1. What happens when two requests hit the same resource at the same instant — specifically, two concurrent ad requests for the same user racing on the same campaign's frequency-cap counter?**
+Because the increment is fire-and-forget and asynchronous rather than an atomic check-and-increment, both requests can legitimately read "one under cap" before either's increment lands, and both select the same near-capped campaign. The user ends up with one extra impression — a small, bounded over-serve, not an error — because this design deliberately chose not to pay a blocking Redis round trip on every request to close a race this cheap.
+
+**2. What happens when traffic spikes 5x during prime time?**
+The Ad Decision Service scales horizontally like any stateless tier, since it holds no per-request state beyond its local Targeting Index copy. The harder constraint is per-request CPU time, not total throughput — under sustained pressure the design degrades ranking sophistication first (bid × predicted-CTR → bid-only → default ad → no-fill) rather than letting any request blow its latency budget, per the Load Handling section in Module 01.
+
+**3. Why doesn't the Ad Decision Service just query the campaign database directly for each request?**
+Because filtering tens of thousands of active campaigns against a relational store, 70,000 times a second, cannot fit inside a 50ms decision budget no matter how well the table is indexed — the query has to already be answered before the request even arrives. That's why campaign data is compiled offline into an in-memory index the request only ever reads from memory.
+
+**4. How do you avoid scanning every active campaign on every ad request?**
+A background indexer periodically compiles `campaign_targeting` into one bitmap per `(dimension, value)` pair; a request intersects a handful of bitmaps (segment ∩ geo ∩ device ∩ budget-eligible) instead of iterating every campaign and checking each rule in application code. This is the same "precompute the expensive part offline, make the hot path a cheap lookup" instinct this guide applies to indexing generally, cross-ref [Database Indexing](../../database-design/database-indexing.md).
+
+**5. Why use a Bloom filter for the frequency-cap pre-check when it can be wrong?**
+Because it can only ever be wrong in the safe direction. A false positive ("maybe already seen") just costs one extra Redis read to confirm — no correctness harm. A false negative is structurally impossible per [Bloom Filters](../../scalability-resilience/bloom-filters.md)'s own guarantee, so the pre-check can never wrongly skip the authoritative Redis check when a user genuinely might be capped. It only ever saves work, for the large majority of candidates a user was never shown at all.
+
+**6. How does frequency capping relate to rate limiting — could you reuse a rate limiter's algorithms directly?**
+Mechanically, yes — it's the same shared-counter problem [Rate Limiting](../../hld-building-blocks/rate-limiting.md) solves: a counter per key (here, `(user, campaign)` instead of `(client, endpoint)`), checked and incremented against a window. The difference is entirely in failure-cost policy: an abuse-prevention rate limit typically needs to fail closed and be exact, because letting requests through unchecked is the failure it exists to prevent. This system deliberately fails open and tolerates slight over-serving, because an unenforced cap for a few minutes costs a few extra ad impressions, not a security incident.
+
+**7. How would you keep a campaign from spending its entire daily budget in the first five minutes?**
+A separate Budget Pacing Service periodically compares each campaign's spend-to-date (from `campaign_spend_ledger`) against a smoothed target — for example, the daily budget spread across expected traffic by hour — and flips the campaign's serving-eligible flag before the next index rebuild picks it up. This is intentionally a coarse, periodic control, not a full pacing algorithm: the eligibility filter just needs to know "should this campaign still be considered," and that flag is cheap to compute and cheap to read.
+
+**8. Why is impression/click logging asynchronous, and why doesn't this system use a transactional outbox the way Payments or the Job Scheduler do?**
+It's asynchronous because the response to the caller must never wait on a durable write — a slow event-pipeline write would otherwise directly cost latency budget on every single ad request. There's no outbox here specifically because there's no local database write on the decision path to anchor one to in the first place: the Ad Decision Service doesn't write to any database as part of deciding an ad, so a direct fire-and-forget publish is the honest, minimal mechanism rather than adding a write purely to get outbox guarantees the design doesn't otherwise need.
+
+**9. What happens to a request if the Redis frequency-cap store is unreachable?**
+The circuit breaker around it fails **open**: `mayShow` returns `true` and the candidate is treated as under-cap rather than the whole decision failing or blocking. This is a deliberate, named departure from the fail-closed default [Rate Limiting](../../hld-building-blocks/rate-limiting.md) recommends for abuse-protection limits — here, an unenforced cap for the duration of an outage is far cheaper than degrading every ad decision across the fleet.
+
+**10. This guide's Payments System never accepts a double-charge, even briefly. Would that same "never wrong" standard ever make sense here?**
+No — and the contrast is worth being precise about. A payment being briefly wrong is either a customer's missing money or a merchant eating a fraudulent chargeback; an ad frequency cap being briefly wrong is one extra impression served to one viewer, at a cost of a few cents of inventory. Payments buys correctness with synchronous, atomic, database-enforced guarantees at every step specifically because the cost of being wrong is high and asymmetric in the other direction; this system buys latency by accepting a bounded, cheap, and explicitly named amount of wrongness instead. Reaching for payments-grade atomicity here wouldn't make the system more correct in any way that matters — it would just make every ad request slower for no benefit anyone is asking for.
