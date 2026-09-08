@@ -171,6 +171,8 @@ CATEGORIES = [
             {"slug": "distributed-coordination-service", "label": "Design a Distributed Lock / Coordination Service (Chubby/ZooKeeper)", "star": True, "kind": "topic-casestudy"},
             {"slug": "multiplayer-game-matchmaking", "label": "Design a Multiplayer Game Backend & Matchmaking (Online Chess)", "star": True, "kind": "topic-casestudy"},
             {"slug": "ab-testing-platform", "label": "Design an A/B Testing / Experimentation Platform", "star": True, "kind": "topic-casestudy"},
+            {"slug": "online-judge", "label": "Design an Online Judge (Code Execution Platform)", "star": True, "kind": "topic-casestudy"},
+            {"slug": "distributed-denylist", "label": "Design a Distributed IP/URL Denylist System", "star": True, "kind": "topic-casestudy"},
         ],
     },
     {
