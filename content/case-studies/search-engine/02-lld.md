@@ -43,7 +43,7 @@ The merge is a k-way merge, not a full re-sort: each shard already returns its o
 
 Before moving to Database Design, sketch (pseudocode is fine) how you'd add:
 
-1. **Typo-tolerant matching** — this guide's [Search Autocomplete](../search-autocomplete/README.md) case study answers the identical question for its trie by layering a fuzzy-match pass on top rather than rebuilding the core structure. Where does that pass sit here — inside the Coordinator, or as a new pre-processing stage in front of it — and does `RankingStrategy` need to know a substitution happened?
+1. **Typo-tolerant matching** — this guide's [Search Autocomplete](../search-autocomplete/00-overview.md) case study answers the identical question for its trie by layering a fuzzy-match pass on top rather than rebuilding the core structure. Where does that pass sit here — inside the Coordinator, or as a new pre-processing stage in front of it — and does `RankingStrategy` need to know a substitution happened?
 2. **Personalized ranking** — a logged-in user's click history nudges their own results. Does this become a third input to `RankingStrategy`, alongside offline authority and query relevance? And what does it do to the query-result cache's key, given the entire premise of caching was that many different users' identical queries could share one cached answer?
 
 Neither has one clean answer — the point is noticing that the interfaces already drawn (`RankingStrategy`, `IndexShardClient`) make it obvious which component *should* own each new piece of behavior, even before you've fully worked out what that behavior looks like.

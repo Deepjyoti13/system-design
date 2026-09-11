@@ -4,7 +4,7 @@
 
 ## Why large binaries don't belong in your primary database
 
-A relational or document database is built for small structured records — indexed, joinable, transactional. Storing a 2GB video or even a 5MB image as a BLOB column bloats every backup, blows past sane row-size limits, and forces every replica to copy bytes that are never queried or joined against anything. Object storage (S3-style: a flat key → blob namespace, no folders, no transactions, no joins) is built for exactly this instead: the database stores a small pointer — a key or a URL — and the actual bytes live somewhere designed to hold them cheaply at scale. This guide's [Ephemeral Stories](../real-world-deep-dives/ephemeral-content-stories/README.md) deep dive is a concrete example of this split in practice: the media lives in object storage behind a CDN, and the database only ever holds a reference to it.
+A relational or document database is built for small structured records — indexed, joinable, transactional. Storing a 2GB video or even a 5MB image as a BLOB column bloats every backup, blows past sane row-size limits, and forces every replica to copy bytes that are never queried or joined against anything. Object storage (S3-style: a flat key → blob namespace, no folders, no transactions, no joins) is built for exactly this instead: the database stores a small pointer — a key or a URL — and the actual bytes live somewhere designed to hold them cheaply at scale. This guide's [Ephemeral Stories](../../README.md) deep dive is a concrete example of this split in practice: the media lives in object storage behind a CDN, and the database only ever holds a reference to it.
 
 ## The naive upload path, and why it doesn't scale
 

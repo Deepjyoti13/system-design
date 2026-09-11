@@ -31,7 +31,7 @@ The code-then-exchange indirection exists for one reason: the code travels throu
 
 - **RBAC (role-based)** — a role ("editor", "admin") either can or can't do X. Cheap to reason about, cheap to audit, but coarse: it can't express "editor, but only for documents in their own department."
 - **ABAC (attribute-based)** — a rule references attributes of the resource and the request itself: `can_edit if user.department == document.department`. More expressive, harder to audit, because the actual permission set for a given user is now the *output* of evaluating rules, not something you can just list.
-- **ReBAC (relationship-based, Zanzibar-style)** — permission follows a graph of relationships: "can view if the user is a member of a group that has access to this specific document." This is what a genuinely nested sharing model needs — [Google Docs](../case-studies/google-docs-collab-editing.md)'s "shared with me, inherited from a parent folder" behavior isn't expressible as a fixed role; it's a traversal.
+- **ReBAC (relationship-based, Zanzibar-style)** — permission follows a graph of relationships: "can view if the user is a member of a group that has access to this specific document." This is what a genuinely nested sharing model needs — [Google Docs](../case-studies/google-docs-collab-editing/00-overview.md)'s "shared with me, inherited from a parent folder" behavior isn't expressible as a fixed role; it's a traversal.
 
 Start with RBAC. Reach for ABAC or ReBAC only once the real permission model stops being a fixed set of roles — adding relationship-graph authorization to a system that only ever needed "admin vs. member" is solving a problem you don't have yet.
 

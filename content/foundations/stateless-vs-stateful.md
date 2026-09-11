@@ -4,7 +4,7 @@
 
 ## What problem this solves
 
-Whether you can add and remove servers freely. That is the whole question. A **stateless** service keeps no client-specific data between requests, so every instance is interchangeable and the [load balancer](load-balancing.md) can send request 2 anywhere regardless of where request 1 went. A **stateful** service keeps something in local memory or on local disk that the next request needs, which quietly makes that one box irreplaceable.
+Whether you can add and remove servers freely. That is the whole question. A **stateless** service keeps no client-specific data between requests, so every instance is interchangeable and the [load balancer](../hld-building-blocks/load-balancing.md) can send request 2 anywhere regardless of where request 1 went. A **stateful** service keeps something in local memory or on local disk that the next request needs, which quietly makes that one box irreplaceable.
 
 The name misleads people: stateless does not mean the system forgot anything. The state still exists — it moved to somewhere shared and durable (Redis, the database, or the client's own cookie). "Stateless" describes the *server*, not the system.
 
@@ -12,16 +12,16 @@ The name misleads people: stateless does not mean the system forgot anything. Th
 
 Say a shopping cart lives in the app server's process memory. Four separate things now go wrong, and they compound:
 
-- **A crash is data loss, not just a retry.** Bob's cart existed in exactly one place. The [load balancer](load-balancing.md) health-checks the box out of rotation in seconds, which is fast — but Bob's cart is already gone, and no amount of horizontal scaling helps, because his state was never anywhere else.
+- **A crash is data loss, not just a retry.** Bob's cart existed in exactly one place. The [load balancer](../hld-building-blocks/load-balancing.md) health-checks the box out of rotation in seconds, which is fast — but Bob's cart is already gone, and no amount of horizontal scaling helps, because his state was never anywhere else.
 - **The load balancer has to remember things.** You need **sticky sessions** (session affinity), typically a cookie or a hash of the client IP pinning Bob to App 2. That is a routing constraint, and it fights load balancing: the LB can no longer send traffic to the least-loaded box, only to the *correct* box. A single hot user's traffic cannot be spread at all.
-- **Deploys stop being free.** Rolling a new version means draining each box and waiting out every session pinned to it, rather than just terminating it (see [Deploying Without Dropping a Single Request](../real-world-deep-dives/zero-downtime-deploys/README.md)). Autoscaling down has the same problem in reverse — you cannot pick an arbitrary instance to kill.
+- **Deploys stop being free.** Rolling a new version means draining each box and waiting out every session pinned to it, rather than just terminating it (see [Deploying Without Dropping a Single Request](../../README.md)). Autoscaling down has the same problem in reverse — you cannot pick an arbitrary instance to kill.
 - **Scaling out gets uneven.** New instances start empty and only accumulate sessions as new users arrive, so a freshly-added box stays underused for as long as sessions live while the old boxes stay hot.
 
 ## Where the state actually goes
 
 Moving state out is a choice between three places, and they are not equivalent:
 
-- **A shared in-memory store** (Redis, Memcached) — the common default for sessions. Fast, and every app box sees the same data. The cost is real: one network round trip is now on the critical path of every request, and that store's availability becomes yours. See [Caching Strategies](caching-strategies.md).
+- **A shared in-memory store** (Redis, Memcached) — the common default for sessions. Fast, and every app box sees the same data. The cost is real: one network round trip is now on the critical path of every request, and that store's availability becomes yours. See [Caching Strategies](../hld-building-blocks/caching-strategies.md).
 - **The client** — a signed cookie or JWT carrying the session itself. The server keeps nothing, which is maximally scalable, but the payload rides on every request and **you cannot revoke it before it expires** — the server has no record to delete. That trade (revocation vs. statelessness) is the entire reason short JWT lifetimes plus refresh tokens exist.
 - **The database** — durable and already there, but a per-request write to a relational store for something as churny as session data is usually the wrong tier for the job.
 
@@ -29,7 +29,7 @@ Moving state out is a choice between three places, and they are not equivalent:
 
 Pushing state out is the default, not a law. Some systems are stateful because the state *is* the product, and pretending otherwise just relocates the problem:
 
-- **Databases and caches themselves.** A Redis node or a database shard owns its data by definition. Scaling these is the [sharding](data-partitioning-sharding.md) and [replication](replication-consensus.md) problem, not the stateless-app problem.
+- **Databases and caches themselves.** A Redis node or a database shard owns its data by definition. Scaling these is the [sharding](../hld-building-blocks/data-partitioning-sharding.md) and [replication](../hld-building-blocks/replication-consensus.md) problem, not the stateless-app problem.
 - **WebSocket and connection-oriented servers.** A live socket is inherently pinned to one box — the connection *is* state. The standard resolution is a thin stateful edge and a stateless core: gateways hold sockets and own nothing else, while a shared registry maps user to gateway so any box can find where to deliver. See [Long Polling, WebSockets & SSE](../scalability-resilience/long-polling-websockets-sse.md).
 - **Consumers with local aggregation state.** A stream processor keeping a running window in memory is stateful on purpose, because re-reading history per event would be absurd. It earns that with checkpointing — periodically flushing offsets and state so a restart resumes rather than restarts.
 
