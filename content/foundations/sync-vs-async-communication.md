@@ -34,7 +34,7 @@ Ask one question: **does the caller need the result to continue?**
 - **Yes → synchronous.** Reading a user's profile to render a page. Checking inventory before confirming an order. Authenticating. Anything where the next line of code needs the answer.
 - **No → asynchronous.** Sending email, generating a thumbnail, updating analytics, warming a cache, reindexing search, notifying downstream systems. The user's request is complete without any of it.
 
-The productive middle ground is to make the *critical path* synchronous and everything else async, which is what a well-designed checkout does: reserve stock and authorise payment synchronously because correctness depends on them; email, invoicing, recommendations and the data warehouse all go on the queue. See [Design an E-commerce Platform](../case-studies/ecommerce-platform/README.md).
+The productive middle ground is to make the *critical path* synchronous and everything else async, which is what a well-designed checkout does: reserve stock and authorise payment synchronously because correctness depends on them; email, invoicing, recommendations and the data warehouse all go on the queue. See [Design an E-commerce Platform](../../README.md).
 
 ## Async without a queue: the other two shapes
 

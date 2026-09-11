@@ -15,7 +15,7 @@ What's deliberately **not** split further: likes and comments are folded into ex
 | API Gateway / LB | Routes writes to Post Service, reads to Feed Service |
 | Post Service | Accepts post/story metadata, writes the post row, publishes `post-created` |
 | Kafka (`post-created`) | Single event, two independent consumer groups — transcode and fan-out never block each other |
-| Media Worker | Transcodes into thumbnail/feed/full-res variants (cross-ref [Video Streaming Service](../video-streaming-service/README.md) for the same idea applied continuously to video bitrates) |
+| Media Worker | Transcodes into thumbnail/feed/full-res variants (cross-ref [Video Streaming Service](../video-streaming-service/00-overview.md) for the same idea applied continuously to video bitrates) |
 | Object Storage (S3) + CDN | Durable media storage and edge-cached delivery (cross-ref [CDN](../../hld-building-blocks/cdn.md)) |
 | Fan-out Worker | Reads the follow graph, applies the fan-out strategy (Architecture-level Strategy pattern, detailed in LLD), writes feed_store/story_store entries |
 | Core DB (MySQL, sharded) | Users, posts, follows — the system of record |

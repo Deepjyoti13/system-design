@@ -25,7 +25,7 @@ Server-Sent Events is a single long-lived connection like a WebSocket, but one-d
 ## Interviewer follow-ups
 
 **How would you scale a WebSocket-based chat service across many server instances so any two connected users can message each other regardless of which server they're on?**
-Sticky-route each client to the instance holding its socket, then give the instances themselves a shared backplane — a pub/sub layer (see [message queues & pub/sub](message-queues-pubsub.md)) that every instance subscribes to, so a message for a user connected to instance B gets published once and instance B's local socket delivers it, no matter which instance received the send.
+Sticky-route each client to the instance holding its socket, then give the instances themselves a shared backplane — a pub/sub layer (see [message queues & pub/sub](../hld-building-blocks/message-queues-pubsub.md)) that every instance subscribes to, so a message for a user connected to instance B gets published once and instance B's local socket delivers it, no matter which instance received the send.
 
 **What happens to open WebSocket connections during a rolling deploy?**
 Every connection to a terminated instance drops — there's no graceful "finish this request first" the way stateless HTTP handling gets, because the connection *is* the ongoing unit of work. A real deploy needs the client to detect the drop and reconnect (ideally to a different instance) and the server side to drain connections onto surviving instances rather than killing all of them at once.

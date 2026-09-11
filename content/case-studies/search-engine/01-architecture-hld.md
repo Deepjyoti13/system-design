@@ -12,7 +12,7 @@ The three tiers also scale on entirely different axes: the query-serving tier sc
 
 | Block | Role |
 |---|---|
-| **Crawler tier** | Continuously fetches pages, politeness-limited and deduplicated — cross-ref [Web Crawler](../web-crawler/README.md) for the frontier mechanics, not re-derived here |
+| **Crawler tier** | Continuously fetches pages, politeness-limited and deduplicated — cross-ref [Web Crawler](../web-crawler/00-overview.md) for the frontier mechanics, not re-derived here |
 | **Indexer** | Consumes crawled pages off a queue, tokenizes them, and builds inverted-index postings — entirely off the query-serving path |
 | **Query Coordinator** (stateless) | Tokenizes an incoming query, fans out to the shards owning its terms, merges and ranks the partial results |
 | **Index Shards** (term-hash partitioned) | Each owns one slice of the inverted index; answers with its own locally-ranked subset of matching documents |

@@ -47,7 +47,7 @@ The inverted index is almost never the primary database — it's a dedicated sea
 Don't write to both synchronously in the request path — write to the primary DB, then propagate to the search index asynchronously via a queue or a CDC stream reading the DB's write log. The search index is a read-optimized derived copy, not a second source of truth, so it can lag briefly without anything being wrong.
 
 **Why might autocomplete need a different data structure than full-text search?**
-Autocomplete is a prefix-match problem ("sal" should suggest "sales", "salary", …), which an inverted index (built for whole-token lookup) doesn't serve well — a trie or a prefix-indexed structure is the actual fit. See [Design Search Autocomplete](../case-studies/search-autocomplete.md).
+Autocomplete is a prefix-match problem ("sal" should suggest "sales", "salary", …), which an inverted index (built for whole-token lookup) doesn't serve well — a trie or a prefix-indexed structure is the actual fit. See [Design Search Autocomplete](../case-studies/search-autocomplete/00-overview.md).
 
 **How would sharding an inverted index across multiple machines work for a dataset too large for one node?**
 Two common approaches: document-based sharding (each shard holds a complete inverted index for its own subset of documents; a query fans out to every shard and merges ranked results) or term-based sharding (each shard owns a subset of the vocabulary; a query is routed only to the shard(s) holding the queried terms). Document-based is simpler and what most real systems (Elasticsearch included) use by default.

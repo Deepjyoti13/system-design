@@ -18,7 +18,7 @@ No — the transform walk in `handleIncoming` (Module 02) replays every operatio
 **6. Why bound replay with periodic snapshots instead of just replaying the full operation log on every reconnect?**
 Because Module 00's capacity math shows the log growing at roughly 1.3TB/hour at peak — replaying an old, heavily-edited document's entire history on every reconnect would make catch-up latency grow unboundedly with document age. A snapshot bounds replay to "since the last snapshot," and because it's just a point-in-time read, it never blocks or is blocked by the live edit stream (Module 01's Concurrent-User Handling).
 
-**7. Would you ever accept eventual consistency here, the way this guide's [Counting a Billion Likes](../../like-counting-at-scale/00-overview.md) case study does for a like count?**
+**7. Would you ever accept eventual consistency here, the way this guide's [Counting a Billion Likes](../../../like-counting-at-scale/00-overview.md) case study does for a like count?**
 Not for the operation log itself — an edit silently applying a few seconds late in the wrong order is exactly the "silently lost or overwritten" failure Module 00 rules out entirely. The one place this design *does* accept looser consistency is the `documents.latest_seq` metadata pointer and snapshot freshness (Module 03), because neither of those affects what the document actually contains, only how quickly secondary views reflect it.
 
 **8. How would you scale this to millions of concurrent documents rather than a few hot ones?**
